@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -65,6 +65,8 @@ export default function Calculator() {
   const [totalScore, setTotalScore] = useState(0);
   const [historyFilter, setHistoryFilter] = useState<string>("all");
   const [performanceLabel, setPerformanceLabel] = useState<string>("");
+  
+  const autoSaveTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const { data: performances = [], isLoading } = useQuery({
     queryKey: ["/api/performances", historyFilter],
@@ -82,10 +84,7 @@ export default function Calculator() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/performances"] });
-      toast({
-        title: "Performance Saved",
-        description: `Total score: ${totalScore.toLocaleString()} points`,
-      });
+      // Don't show toast for auto-save to avoid spam
     },
     onError: () => {
       toast({
@@ -163,40 +162,40 @@ export default function Calculator() {
     }
     
     setEventResults(newResults);
-    calculateTotal();
-  };
-
-  const calculateTotal = () => {
-    const total = eventResults.reduce((sum, event) => sum + event.points, 0);
+    
+    // Calculate total automatically
+    const total = newResults.reduce((sum, event) => sum + event.points, 0);
     setTotalScore(total);
+    
+    // Auto-save if we have a valid performance
+    if (total > 0 && selectedEventType) {
+      autoSavePerformance(newResults, total);
+    }
   };
 
-  const savePerformance = () => {
-    if (!selectedEventType) {
-      toast({
-        title: "Error",
-        description: "Please select an event type first",
-        variant: "destructive",
-      });
-      return;
-    }
+  const autoSavePerformance = (results: EventResult[], total: number) => {
+    if (!selectedEventType || total === 0) return;
     
-    if (totalScore === 0) {
-      toast({
-        title: "Error",
-        description: "Please enter some results first",
-        variant: "destructive",
-      });
-      return;
+    // Debounce auto-save to avoid too many requests
+    if (autoSaveTimeoutRef.current) {
+      clearTimeout(autoSaveTimeoutRef.current);
     }
-    
-    savePerformanceMutation.mutate({
-      eventType: selectedEventType,
-      eventResults,
-      totalScore,
-      label: performanceLabel || undefined,
-    });
+    autoSaveTimeoutRef.current = setTimeout(() => {
+      savePerformanceMutation.mutate({
+        eventType: selectedEventType,
+        eventResults: results,
+        totalScore: total,
+        label: performanceLabel || undefined,
+      });
+    }, 1000); // Wait 1 second after user stops typing
   };
+
+  // Auto-save when label changes
+  useEffect(() => {
+    if (totalScore > 0 && selectedEventType) {
+      autoSavePerformance(eventResults, totalScore);
+    }
+  }, [performanceLabel]);
 
   const clearAll = () => {
     if (selectedEventType) {
@@ -399,19 +398,7 @@ export default function Calculator() {
                 />
               </div>
 
-              <div className="flex flex-col sm:flex-row gap-4">
-                <Button onClick={calculateTotal} className="flex-1 brutal-button bg-primary text-primary-foreground">
-                  <CalculatorIcon className="h-4 w-4 mr-2" />
-                  CALCULATE TOTAL
-                </Button>
-                <Button 
-                  onClick={savePerformance} 
-                  disabled={savePerformanceMutation.isPending}
-                  className="flex-1 brutal-button bg-success text-success-foreground"
-                >
-                  <Save className="h-4 w-4 mr-2" />
-                  SAVE PERFORMANCE
-                </Button>
+              <div className="flex justify-center">
                 <Button onClick={clearAll} className="brutal-button bg-destructive text-destructive-foreground">
                   <Eraser className="h-4 w-4 mr-2" />
                   CLEAR ALL
