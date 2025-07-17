@@ -9,7 +9,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 
-import { Trash2, Eye, Calculator as CalculatorIcon, Save, Eraser, Trophy, Medal, Crown, Clock, Ruler, Target, Zap, Star, History } from "lucide-react";
+import { Trash2, Eye, Calculator as CalculatorIcon, Save, Eraser, Trophy, Medal, Crown, Clock, Ruler, Target, Zap, Star, History, ToggleLeft, ToggleRight } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { queryClient } from "@/lib/queryClient";
 import { apiRequest } from "@/lib/queryClient";
@@ -81,8 +81,44 @@ export default function Calculator() {
   const [historyFilter, setHistoryFilter] = useState<string>("all");
   const [performanceLabel, setPerformanceLabel] = useState<string>("");
   const [editingPerformanceId, setEditingPerformanceId] = useState<string | null>(null);
+  const [isMetric, setIsMetric] = useState<boolean>(true);
   
   const autoSaveTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  const getEventDescription = (eventName: string) => {
+    const distanceEvents = ["Long Jump", "Shot Put", "Discus", "Javelin"];
+    const heightEvents = ["High Jump", "Pole Vault"];
+    
+    if (distanceEvents.includes(eventName)) {
+      return "Distance";
+    } else if (heightEvents.includes(eventName)) {
+      return "Height";
+    }
+    return "Distance/Height";
+  };
+
+  const getEventUnit = (eventName: string) => {
+    if (eventName.includes("m") || eventName.includes("Hurdles")) {
+      return "seconds";
+    }
+    return isMetric ? "meters" : "feet";
+  };
+
+  const convertToMetric = (value: string, eventName: string) => {
+    if (!value || isMetric) return value;
+    
+    const distanceEvents = ["Long Jump", "Shot Put", "Discus", "Javelin"];
+    const heightEvents = ["High Jump", "Pole Vault"];
+    
+    if (distanceEvents.includes(eventName) || heightEvents.includes(eventName)) {
+      // Convert feet to meters (1 foot = 0.3048 meters)
+      const feet = parseFloat(value);
+      if (!isNaN(feet)) {
+        return (feet * 0.3048).toFixed(2);
+      }
+    }
+    return value;
+  };
 
   const { data: performances = [], isLoading } = useQuery({
     queryKey: ["/api/performances", historyFilter],
@@ -190,7 +226,8 @@ export default function Calculator() {
       // Auto-calculate points when result is entered
       if (value.trim() && selectedEventType) {
         const event = eventResults[index];
-        const calculatedPoints = calculatePoints(selectedEventType, event.name, value, event.type);
+        const metricValue = convertToMetric(value, event.name);
+        const calculatedPoints = calculatePoints(selectedEventType, event.name, metricValue, event.type);
         newResults[index].points = calculatedPoints;
       } else {
         newResults[index].points = 0;
@@ -202,7 +239,17 @@ export default function Calculator() {
       if (points > 0 && selectedEventType) {
         const event = eventResults[index];
         const estimatedResult = estimateResult(selectedEventType, event.name, points, event.type);
-        newResults[index].result = estimatedResult;
+        // Convert back to imperial if needed for display
+        if (!isMetric && (["Long Jump", "Shot Put", "Discus", "Javelin", "High Jump", "Pole Vault"].includes(event.name))) {
+          const meters = parseFloat(estimatedResult);
+          if (!isNaN(meters)) {
+            newResults[index].result = (meters / 0.3048).toFixed(2);
+          } else {
+            newResults[index].result = estimatedResult;
+          }
+        } else {
+          newResults[index].result = estimatedResult;
+        }
       } else {
         newResults[index].result = "";
       }
@@ -311,6 +358,15 @@ export default function Calculator() {
                 <p className="text-white/90 text-xs mt-0.5 font-medium tracking-wide">A Track & Field Multi event calculator</p>
               </div>
             </div>
+            <div className="flex items-center space-x-2">
+              <Button
+                onClick={() => setIsMetric(!isMetric)}
+                className="glass-button text-white hover:text-white text-sm px-3 py-1"
+              >
+                {isMetric ? <ToggleRight className="h-4 w-4 mr-1" /> : <ToggleLeft className="h-4 w-4 mr-1" />}
+                {isMetric ? "Metric" : "Imperial"}
+              </Button>
+            </div>
           </div>
         </div>
       </header>
@@ -400,7 +456,7 @@ export default function Calculator() {
                         <div>
                           <h4 className="font-semibold text-foreground text-sm">{event.name}</h4>
                           <p className="text-xs text-muted-foreground font-medium tracking-wide">
-                            {event.type === "time" ? "Time" : "Distance/Height"} ({event.unit})
+                            {event.type === "time" ? "Time" : getEventDescription(event.name)} ({getEventUnit(event.name)})
                           </p>
                         </div>
                       </div>
