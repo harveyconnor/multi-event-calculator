@@ -16,31 +16,9 @@ import { apiRequest } from "@/lib/queryClient";
 import { type Performance, type EventResult } from "@shared/schema";
 import { calculatePoints, estimateResult } from "@/lib/scoring";
 
-type EventType = "pentathlon" | "heptathlon" | "decathlon";
+type EventType = "decathlon" | "heptathlon" | "pentathlon";
 
 const eventConfigs = {
-  pentathlon: {
-    name: "Pentathlon",
-    events: [
-      { name: "100m Hurdles", type: "time" as const, unit: "seconds", placeholder: "13.24" },
-      { name: "High Jump", type: "measurement" as const, unit: "meters", placeholder: "1.85" },
-      { name: "Shot Put", type: "measurement" as const, unit: "meters", placeholder: "14.50" },
-      { name: "200m", type: "time" as const, unit: "seconds", placeholder: "23.45" },
-      { name: "800m", type: "time" as const, unit: "seconds", placeholder: "2:10.50" }
-    ]
-  },
-  heptathlon: {
-    name: "Heptathlon",
-    events: [
-      { name: "100m Hurdles", type: "time" as const, unit: "seconds", placeholder: "13.24" },
-      { name: "High Jump", type: "measurement" as const, unit: "meters", placeholder: "1.85" },
-      { name: "Shot Put", type: "measurement" as const, unit: "meters", placeholder: "14.50" },
-      { name: "200m", type: "time" as const, unit: "seconds", placeholder: "23.45" },
-      { name: "Long Jump", type: "measurement" as const, unit: "meters", placeholder: "6.50" },
-      { name: "Javelin", type: "measurement" as const, unit: "meters", placeholder: "55.20" },
-      { name: "800m", type: "time" as const, unit: "seconds", placeholder: "2:10.50" }
-    ]
-  },
   decathlon: {
     name: "Decathlon",
     events: [
@@ -55,14 +33,51 @@ const eventConfigs = {
       { name: "Javelin", type: "measurement" as const, unit: "meters", placeholder: "65.40" },
       { name: "1500m", type: "time" as const, unit: "seconds", placeholder: "4:25.50" }
     ]
+  },
+  heptathlon: {
+    name: "Heptathlon",
+    events: [
+      { name: "100m Hurdles", type: "time" as const, unit: "seconds", placeholder: "13.24" },
+      { name: "High Jump", type: "measurement" as const, unit: "meters", placeholder: "1.85" },
+      { name: "Shot Put", type: "measurement" as const, unit: "meters", placeholder: "14.50" },
+      { name: "200m", type: "time" as const, unit: "seconds", placeholder: "23.45" },
+      { name: "Long Jump", type: "measurement" as const, unit: "meters", placeholder: "6.50" },
+      { name: "Javelin", type: "measurement" as const, unit: "meters", placeholder: "55.20" },
+      { name: "800m", type: "time" as const, unit: "seconds", placeholder: "2:10.50" }
+    ]
+  },
+  pentathlon: {
+    name: "Pentathlon",
+    events: [
+      { name: "100m Hurdles", type: "time" as const, unit: "seconds", placeholder: "13.24" },
+      { name: "High Jump", type: "measurement" as const, unit: "meters", placeholder: "1.85" },
+      { name: "Shot Put", type: "measurement" as const, unit: "meters", placeholder: "14.50" },
+      { name: "200m", type: "time" as const, unit: "seconds", placeholder: "23.45" },
+      { name: "800m", type: "time" as const, unit: "seconds", placeholder: "2:10.50" }
+    ]
   }
 };
 
 export default function Calculator() {
   const { toast } = useToast();
-  const [selectedEventType, setSelectedEventType] = useState<EventType | null>(null);
+  const [selectedEventType, setSelectedEventType] = useState<EventType | null>("decathlon");
   const [eventResults, setEventResults] = useState<EventResult[]>([]);
   const [totalScore, setTotalScore] = useState(0);
+  
+  // Initialize decathlon events on mount
+  useEffect(() => {
+    if (selectedEventType === "decathlon") {
+      const config = eventConfigs[selectedEventType];
+      const newResults = config.events.map(event => ({
+        name: event.name,
+        result: "",
+        points: 0,
+        type: event.type,
+        unit: event.unit
+      }));
+      setEventResults(newResults);
+    }
+  }, []);
   const [historyFilter, setHistoryFilter] = useState<string>("all");
   const [performanceLabel, setPerformanceLabel] = useState<string>("");
   const [editingPerformanceId, setEditingPerformanceId] = useState<string | null>(null);
@@ -472,9 +487,9 @@ export default function Calculator() {
                   </SelectTrigger>
                   <SelectContent className="glass-dropdown">
                     <SelectItem value="all" className="glass-dropdown-item">All Events</SelectItem>
-                    <SelectItem value="pentathlon" className="glass-dropdown-item">Pentathlon</SelectItem>
-                    <SelectItem value="heptathlon" className="glass-dropdown-item">Heptathlon</SelectItem>
                     <SelectItem value="decathlon" className="glass-dropdown-item">Decathlon</SelectItem>
+                    <SelectItem value="heptathlon" className="glass-dropdown-item">Heptathlon</SelectItem>
+                    <SelectItem value="pentathlon" className="glass-dropdown-item">Pentathlon</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
