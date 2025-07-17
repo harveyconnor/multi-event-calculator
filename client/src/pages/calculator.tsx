@@ -111,13 +111,13 @@ const eventConfigs = {
 
 export default function Calculator() {
   const { toast } = useToast();
-  const [selectedEventType, setSelectedEventType] = useState<EventType | null>("decathlon");
+  const [selectedEventType, setSelectedEventType] = useState<EventType | null>(null);
   const [eventResults, setEventResults] = useState<EventResult[]>([]);
   const [totalScore, setTotalScore] = useState(0);
   
-  // Initialize decathlon events on mount
+  // Initialize events when event type is selected
   useEffect(() => {
-    if (selectedEventType === "decathlon") {
+    if (selectedEventType) {
       const config = eventConfigs[selectedEventType];
       const newResults = config.events.map(event => ({
         name: event.name,
@@ -129,7 +129,7 @@ export default function Calculator() {
       }));
       setEventResults(newResults);
     }
-  }, []);
+  }, [selectedEventType]);
   const [historyFilter, setHistoryFilter] = useState<string>("all");
   const [performanceLabel, setPerformanceLabel] = useState<string>("");
   const [editingPerformanceId, setEditingPerformanceId] = useState<string | null>(null);
@@ -322,6 +322,8 @@ export default function Calculator() {
     setEventResults(newResults);
     setTotalScore(0);
     setPerformanceLabel("");
+    setEditingPerformanceId(null); // Reset editing ID
+    setNewAchievements([]); // Clear any achievements
     
     toast({
       title: `${config.name} Selected`,
@@ -758,7 +760,7 @@ export default function Calculator() {
                 </Button>
                 <Button onClick={clearAll} className="glass-button bg-red-500/20 text-red-200 hover:bg-red-500/30 border-red-400/30 transition-all duration-200 text-sm px-4 py-2">
                   <Eraser className="h-3 w-3 mr-1" />
-                  Clear All
+                  Clear all and start over
                 </Button>
               </div>
             </CardContent>

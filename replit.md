@@ -133,3 +133,5 @@ The application follows a modern full-stack architecture with strong typing thro
 - **Performance Enhancement**: Fixed React hooks issues and optimized component rendering
 - **Offline-First Architecture**: Converted from API server to fully offline local storage using IndexedDB and localStorage
 - **PWA Features**: Added Progressive Web App capabilities with service worker, offline status, and install functionality
+- **Day-Based Event Organization**: Implemented day divisions for decathlon and heptathlon with running subtotals
+- **Enhanced UI/UX**: Calculator hidden by default, comprehensive summary section with Day 1/Day 2/Final totals, improved form reset behavior
