@@ -101,6 +101,7 @@ export default function Calculator() {
     onSuccess: (savedPerformance) => {
       queryClient.invalidateQueries({ queryKey: ["/api/performances"] });
       // Set the editing ID to the newly created performance UUID so subsequent saves are updates
+      console.log("Saved performance:", savedPerformance);
       setEditingPerformanceId(savedPerformance.uuid);
       toast({
         title: "Performance Saved",
