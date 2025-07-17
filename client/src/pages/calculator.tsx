@@ -570,19 +570,13 @@ export default function Calculator() {
                   // Show events organized by day
                   [1, 2].map(day => (
                     <div key={day} className="space-y-3">
-                      <div className="flex items-center justify-between">
+                      <div className="flex items-center">
                         <h3 className="text-sm font-bold text-foreground flex items-center gap-2">
                           <div className="glass-icon-container w-5 h-5 flex items-center justify-center bg-gradient-to-br from-orange-500/20 to-red-500/20 border-orange-400/30">
                             <span className="text-xs font-bold text-white">{day}</span>
                           </div>
                           Day {day}
                         </h3>
-                        <div className="glass-card bg-gradient-to-r from-orange-500/20 to-red-500/20 border-orange-400/30 px-3 py-1">
-                          <div className="flex items-center gap-2">
-                            <span className="text-xs font-semibold text-white">Day {day} Total:</span>
-                            <span className="text-sm font-bold text-white">{getDaySubtotal(day).toLocaleString()}</span>
-                          </div>
-                        </div>
                       </div>
                       
                       {getEventsByDay(day).map((event, index) => {
@@ -643,6 +637,14 @@ export default function Calculator() {
                           </div>
                         );
                       })}
+                      
+                      {/* Day Subtotal */}
+                      <div className="glass-card bg-gradient-to-r from-orange-500/20 to-red-500/20 border-orange-400/30 p-3 mt-3">
+                        <div className="flex items-center justify-between">
+                          <span className="text-sm font-bold text-white">Day {day} Total:</span>
+                          <span className="text-lg font-black text-white">{getDaySubtotal(day).toLocaleString()}</span>
+                        </div>
+                      </div>
                     </div>
                   ))
                 ) : (
@@ -704,6 +706,32 @@ export default function Calculator() {
                   ))
                 )}
               </div>
+              
+              {/* Summary Section for Multi-Day Events */}
+              {hasMultipleDays() && (
+                <div className="mt-6 mb-4 space-y-3">
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                    <div className="glass-card bg-gradient-to-r from-orange-500/20 to-red-500/20 border-orange-400/30 p-4">
+                      <div className="text-center">
+                        <div className="text-xs font-semibold text-orange-200 mb-1">Day 1 Total</div>
+                        <div className="text-2xl font-black text-white">{getDaySubtotal(1).toLocaleString()}</div>
+                      </div>
+                    </div>
+                    <div className="glass-card bg-gradient-to-r from-red-500/20 to-pink-500/20 border-red-400/30 p-4">
+                      <div className="text-center">
+                        <div className="text-xs font-semibold text-red-200 mb-1">Day 2 Total</div>
+                        <div className="text-2xl font-black text-white">{getDaySubtotal(2).toLocaleString()}</div>
+                      </div>
+                    </div>
+                    <div className="glass-card bg-gradient-to-r from-emerald-500/20 to-green-500/20 border-emerald-400/30 p-4">
+                      <div className="text-center">
+                        <div className="text-xs font-semibold text-emerald-200 mb-1">Final Total</div>
+                        <div className="text-2xl font-black text-white">{totalScore.toLocaleString()}</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
 
               <div className="mb-3 mt-3">
                 <Label htmlFor="performance-label" className="text-xs font-semibold text-foreground tracking-wide">
