@@ -84,7 +84,10 @@ export default function Calculator() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/performances"] });
-      // Don't show toast for auto-save to avoid spam
+      toast({
+        title: "Performance Saved",
+        description: "Your performance has been saved successfully",
+      });
     },
     onError: () => {
       toast({
@@ -166,36 +169,18 @@ export default function Calculator() {
     // Calculate total automatically
     const total = newResults.reduce((sum, event) => sum + event.points, 0);
     setTotalScore(total);
-    
-    // Auto-save if we have a valid performance
-    if (total > 0 && selectedEventType) {
-      autoSavePerformance(newResults, total);
-    }
   };
 
-  const autoSavePerformance = (results: EventResult[], total: number) => {
-    if (!selectedEventType || total === 0) return;
+  const savePerformance = () => {
+    if (!selectedEventType || totalScore === 0) return;
     
-    // Debounce auto-save to avoid too many requests
-    if (autoSaveTimeoutRef.current) {
-      clearTimeout(autoSaveTimeoutRef.current);
-    }
-    autoSaveTimeoutRef.current = setTimeout(() => {
-      savePerformanceMutation.mutate({
-        eventType: selectedEventType,
-        eventResults: results,
-        totalScore: total,
-        label: performanceLabel || undefined,
-      });
-    }, 1000); // Wait 1 second after user stops typing
+    savePerformanceMutation.mutate({
+      eventType: selectedEventType,
+      eventResults: eventResults,
+      totalScore: totalScore,
+      label: performanceLabel || undefined,
+    });
   };
-
-  // Auto-save when label changes
-  useEffect(() => {
-    if (totalScore > 0 && selectedEventType) {
-      autoSavePerformance(eventResults, totalScore);
-    }
-  }, [performanceLabel]);
 
   const clearAll = () => {
     if (selectedEventType) {
@@ -386,11 +371,9 @@ export default function Calculator() {
                 ))}
               </div>
 
-              <div className="my-8 h-1 bg-border"></div>
-
               <div className="mb-6">
                 <Label htmlFor="performance-label" className="text-sm font-semibold text-foreground uppercase tracking-wide">
-                  PERFORMANCE LABEL (OPTIONAL)
+                  LABEL (OPTIONAL)
                 </Label>
                 <Input
                   id="performance-label"
@@ -402,7 +385,15 @@ export default function Calculator() {
                 />
               </div>
 
-              <div className="flex justify-center">
+              <div className="flex justify-center space-x-4">
+                <Button 
+                  onClick={() => savePerformance()}
+                  disabled={totalScore === 0 || !selectedEventType || savePerformanceMutation.isPending}
+                  className="glass-button bg-blue-500/20 text-blue-200 hover:bg-blue-500/30 border-blue-400/30 transition-all duration-200"
+                >
+                  <Save className="h-4 w-4 mr-2" />
+                  {savePerformanceMutation.isPending ? 'SAVING...' : 'SAVE PERFORMANCE'}
+                </Button>
                 <Button onClick={clearAll} className="glass-button bg-red-500/20 text-red-200 hover:bg-red-500/30 border-red-400/30 transition-all duration-200">
                   <Eraser className="h-4 w-4 mr-2" />
                   CLEAR ALL
