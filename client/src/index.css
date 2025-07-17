@@ -160,11 +160,14 @@
     border: 3px solid hsl(var(--border));
     box-shadow: inset 2px 2px 0px hsl(var(--border) / 0.1);
     font-weight: 700;
+    outline: 2px solid hsl(var(--border));
+    outline-offset: 2px;
   }
   
   .brutal-input:focus {
     box-shadow: inset 2px 2px 0px hsl(var(--border) / 0.2), 0 0 0 3px hsl(var(--primary));
-    outline: none;
+    outline: 3px solid hsl(var(--primary));
+    outline-offset: 2px;
   }
   
   .brutal-header {
@@ -185,6 +188,13 @@
     border: 3px solid hsl(var(--border));
     box-shadow: 3px 3px 0px hsl(var(--border));
     font-weight: 700;
+    outline: 2px solid hsl(var(--border));
+    outline-offset: 2px;
+  }
+  
+  .brutal-select:focus {
+    outline: 3px solid hsl(var(--primary));
+    outline-offset: 2px;
   }
   
   .brutal-table {
