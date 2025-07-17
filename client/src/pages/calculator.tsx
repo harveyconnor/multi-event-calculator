@@ -286,14 +286,14 @@ export default function Calculator() {
                 <CalculatorIcon className="h-8 w-8 text-white" />
               </div>
               <div>
-                <h1 className="text-4xl font-semibold tracking-tight uppercase text-white">ATHLETICS CALCULATOR</h1>
-                <p className="text-white/90 text-sm mt-1 font-medium uppercase tracking-wide">MULTI-EVENT PERFORMANCE TRACKER</p>
+                <h1 className="text-4xl font-semibold tracking-tight text-white">Athletics Calculator</h1>
+                <p className="text-white/90 text-sm mt-1 font-medium tracking-wide">Multi-Event Performance Tracker</p>
               </div>
             </div>
             <div className="flex items-center space-x-3">
               <Button className="glass-button text-white hover:text-white">
                 <History className="h-4 w-4 mr-2" />
-                <span className="hidden sm:inline">HISTORY</span>
+                <span className="hidden sm:inline">History</span>
               </Button>
               <ThemeToggle />
             </div>
@@ -305,11 +305,11 @@ export default function Calculator() {
         {/* Event Type Selection */}
         <Card className="mb-8 glass-card">
           <CardHeader>
-            <CardTitle className="flex items-center gap-2 text-2xl font-semibold uppercase tracking-wide">
+            <CardTitle className="flex items-center gap-2 text-2xl font-semibold tracking-wide">
               <div className="glass-icon-container w-8 h-8 flex items-center justify-center bg-gradient-to-br from-blue-500/20 to-purple-500/20 border-blue-400/30">
                 <Target className="h-4 w-4 text-white" />
               </div>
-              SELECT EVENT TYPE
+              Select Event Type
             </CardTitle>
           </CardHeader>
           <CardContent className="p-6">
@@ -333,8 +333,8 @@ export default function Calculator() {
                       {getEventTypeIcon(eventType)}
                     </div>
                     <div className="text-left">
-                      <h3 className="font-semibold text-lg uppercase">{eventConfigs[eventType].name}</h3>
-                      <p className="text-sm font-medium">{eventConfigs[eventType].events.length} EVENTS</p>
+                      <h3 className="font-semibold text-lg">{eventConfigs[eventType].name}</h3>
+                      <p className="text-sm font-medium">{eventConfigs[eventType].events.length} Events</p>
                     </div>
                   </div>
                 </Button>
@@ -348,19 +348,19 @@ export default function Calculator() {
           <Card className="mb-8 glass-card">
             <CardHeader>
               <div className="flex items-center justify-between">
-                <CardTitle className="flex items-center gap-2 text-2xl font-semibold uppercase tracking-wide">
+                <CardTitle className="flex items-center gap-2 text-2xl font-semibold tracking-wide">
                   <div className="glass-icon-container w-8 h-8 flex items-center justify-center bg-gradient-to-br from-yellow-500/20 to-orange-500/20 border-yellow-400/30">
                     <Zap className="h-4 w-4 text-white" />
                   </div>
-                  {eventConfigs[selectedEventType].name} CALCULATOR
+                  {eventConfigs[selectedEventType].name} Calculator
                   <Badge className="ml-2 glass-badge bg-secondary text-secondary-foreground">
-                    {eventConfigs[selectedEventType].events.length} EVENTS
+                    {eventConfigs[selectedEventType].events.length} Events
                   </Badge>
                 </CardTitle>
                 <div className="glass-card bg-gradient-to-r from-blue-500/20 to-purple-500/20 border-blue-400/30 px-6 py-3">
                   <div className="flex items-center gap-2">
                     <Star className="h-5 w-5 text-white" />
-                    <span className="text-sm font-semibold text-white uppercase tracking-wide">TOTAL:</span>
+                    <span className="text-sm font-semibold text-white tracking-wide">Total:</span>
                     <span className="text-2xl font-bold text-white">{totalScore.toLocaleString()}</span>
                   </div>
                 </div>
@@ -422,8 +422,8 @@ export default function Calculator() {
               </div>
 
               <div className="mb-6 mt-8">
-                <Label htmlFor="performance-label" className="text-sm font-semibold text-foreground uppercase tracking-wide">
-                  LABEL
+                <Label htmlFor="performance-label" className="text-sm font-semibold text-foreground tracking-wide">
+                  Label
                 </Label>
                 <Input
                   id="performance-label"
@@ -442,11 +442,11 @@ export default function Calculator() {
                   className="glass-button bg-blue-500/20 text-blue-200 hover:bg-blue-500/30 border-blue-400/30 transition-all duration-200"
                 >
                   <Save className="h-4 w-4 mr-2" />
-                  {savePerformanceMutation.isPending || updatePerformanceMutation.isPending ? 'SAVING...' : (editingPerformanceId ? 'UPDATE PERFORMANCE' : 'SAVE PERFORMANCE')}
+                  {savePerformanceMutation.isPending || updatePerformanceMutation.isPending ? 'Saving...' : (editingPerformanceId ? 'Update Performance' : 'Save Performance')}
                 </Button>
                 <Button onClick={clearAll} className="glass-button bg-red-500/20 text-red-200 hover:bg-red-500/30 border-red-400/30 transition-all duration-200">
                   <Eraser className="h-4 w-4 mr-2" />
-                  CLEAR ALL
+                  Clear All
                 </Button>
               </div>
             </CardContent>
@@ -457,11 +457,11 @@ export default function Calculator() {
         <Card className="glass-card">
           <CardHeader>
             <div className="flex items-center justify-between">
-              <CardTitle className="flex items-center gap-2 text-2xl font-semibold uppercase tracking-wide">
+              <CardTitle className="flex items-center gap-2 text-2xl font-semibold tracking-wide">
                 <div className="glass-icon-container w-8 h-8 flex items-center justify-center bg-gradient-to-br from-green-500/20 to-emerald-500/20 border-green-400/30">
                   <History className="h-4 w-4 text-white" />
                 </div>
-                PERFORMANCE HISTORY
+                Performance History
               </CardTitle>
               <div className="flex items-center space-x-3">
                 <Select value={historyFilter} onValueChange={setHistoryFilter}>
@@ -469,10 +469,10 @@ export default function Calculator() {
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent className="glass-dropdown">
-                    <SelectItem value="all" className="glass-dropdown-item">ALL EVENTS</SelectItem>
-                    <SelectItem value="pentathlon" className="glass-dropdown-item">PENTATHLON</SelectItem>
-                    <SelectItem value="heptathlon" className="glass-dropdown-item">HEPTATHLON</SelectItem>
-                    <SelectItem value="decathlon" className="glass-dropdown-item">DECATHLON</SelectItem>
+                    <SelectItem value="all" className="glass-dropdown-item">All Events</SelectItem>
+                    <SelectItem value="pentathlon" className="glass-dropdown-item">Pentathlon</SelectItem>
+                    <SelectItem value="heptathlon" className="glass-dropdown-item">Heptathlon</SelectItem>
+                    <SelectItem value="decathlon" className="glass-dropdown-item">Decathlon</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -482,26 +482,26 @@ export default function Calculator() {
             {isLoading ? (
               <div className="text-center py-12">
                 <div className="w-12 h-12 border-4 border-border border-t-primary mx-auto mb-4 animate-spin"></div>
-                <p className="text-muted-foreground font-bold uppercase tracking-wide">LOADING PERFORMANCES...</p>
+                <p className="text-muted-foreground font-bold tracking-wide">Loading Performances...</p>
               </div>
             ) : performances.length === 0 ? (
               <div className="text-center py-12">
                 <div className="glass-icon-container w-20 h-20 flex items-center justify-center mx-auto mb-6 transform rotate-12 bg-gradient-to-br from-purple-500/20 to-blue-500/20 border-purple-400/30">
                   <Trophy className="h-10 w-10 text-white" />
                 </div>
-                <p className="text-muted-foreground font-semibold uppercase tracking-wide">NO PERFORMANCES RECORDED YET</p>
-                <p className="text-sm text-muted-foreground mt-1 font-medium">START BY SELECTING AN EVENT TYPE AND ENTERING RESULTS</p>
+                <p className="text-muted-foreground font-semibold tracking-wide">No Performances Recorded Yet</p>
+                <p className="text-sm text-muted-foreground mt-1 font-medium">Start by selecting an event type and entering results</p>
               </div>
             ) : (
               <div className="overflow-x-auto">
                 <Table className="glass-table">
                   <TableHeader>
                     <TableRow>
-                      <TableHead className="text-foreground font-black uppercase tracking-wide">DATE</TableHead>
-                      <TableHead className="text-foreground font-black uppercase tracking-wide">LABEL</TableHead>
-                      <TableHead className="text-foreground font-black uppercase tracking-wide">EVENT TYPE</TableHead>
-                      <TableHead className="text-foreground font-black uppercase tracking-wide">TOTAL SCORE</TableHead>
-                      <TableHead className="text-foreground font-black uppercase tracking-wide">ACTIONS</TableHead>
+                      <TableHead className="text-foreground font-black tracking-wide">Date</TableHead>
+                      <TableHead className="text-foreground font-black tracking-wide">Label</TableHead>
+                      <TableHead className="text-foreground font-black tracking-wide">Event Type</TableHead>
+                      <TableHead className="text-foreground font-black tracking-wide">Total Score</TableHead>
+                      <TableHead className="text-foreground font-black tracking-wide">Actions</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>

@@ -327,7 +327,38 @@
     color: white !important;
   }
 
+  .glass-dropdown-item:focus {
+    background: rgba(255, 255, 255, 0.2) !important;
+    color: white !important;
+  }
+
   .dark .glass-dropdown-item:hover {
+    background: rgba(255, 255, 255, 0.1) !important;
+    color: white !important;
+  }
+
+  .dark .glass-dropdown-item:focus {
+    background: rgba(255, 255, 255, 0.1) !important;
+    color: white !important;
+  }
+
+  /* Override Radix UI Select item default blue styling */
+  .glass-dropdown-item[data-highlighted] {
+    background: rgba(255, 255, 255, 0.2) !important;
+    color: white !important;
+  }
+
+  .dark .glass-dropdown-item[data-highlighted] {
+    background: rgba(255, 255, 255, 0.1) !important;
+    color: white !important;
+  }
+
+  .glass-dropdown-item[data-state="checked"] {
+    background: rgba(255, 255, 255, 0.2) !important;
+    color: white !important;
+  }
+
+  .dark .glass-dropdown-item[data-state="checked"] {
     background: rgba(255, 255, 255, 0.1) !important;
     color: white !important;
   }
