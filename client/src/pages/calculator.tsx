@@ -1,13 +1,15 @@
 import { useState, useEffect } from "react";
 import { useQuery, useMutation } from "@tanstack/react-query";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
-import { Trash2, Eye, Calculator as CalculatorIcon, Save, Eraser, Trophy, Medal, Crown, Clock, Ruler, History, Settings } from "lucide-react";
+import { Separator } from "@/components/ui/separator";
+import { ThemeToggle } from "@/components/ui/theme-toggle";
+import { Trash2, Eye, Calculator as CalculatorIcon, Save, Eraser, Trophy, Medal, Crown, Clock, Ruler, History, Settings, Target, Zap, Star } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { queryClient } from "@/lib/queryClient";
 import { apiRequest } from "@/lib/queryClient";
@@ -236,50 +238,64 @@ export default function Calculator() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/50 dark:from-background dark:via-background dark:to-muted/20">
       {/* Header */}
-      <header className="bg-primary text-white shadow-lg">
-        <div className="container mx-auto px-4 py-6">
+      <header className="relative bg-gradient-to-r from-primary via-primary/90 to-primary/80 dark:from-primary/90 dark:via-primary/80 dark:to-primary/70 text-primary-foreground shadow-2xl">
+        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent"></div>
+        <div className="container mx-auto px-4 py-8 relative">
           <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-3">
-              <CalculatorIcon className="h-8 w-8" />
-              <h1 className="text-2xl font-bold">Athletics Multi-Event Calculator</h1>
-            </div>
             <div className="flex items-center space-x-4">
-              <Button variant="secondary" size="sm" className="bg-white bg-opacity-20 hover:bg-opacity-30">
+              <div className="p-2 bg-white/10 rounded-xl backdrop-blur-sm">
+                <CalculatorIcon className="h-8 w-8" />
+              </div>
+              <div>
+                <h1 className="text-3xl font-bold tracking-tight">Athletics Calculator</h1>
+                <p className="text-primary-foreground/80 text-sm mt-1">Multi-event performance tracking</p>
+              </div>
+            </div>
+            <div className="flex items-center space-x-3">
+              <Button variant="ghost" size="sm" className="bg-white/10 hover:bg-white/20 text-primary-foreground border-white/20">
                 <History className="h-4 w-4 mr-2" />
                 <span className="hidden sm:inline">History</span>
               </Button>
-              <Button variant="secondary" size="sm" className="bg-white bg-opacity-20 hover:bg-opacity-30">
-                <Settings className="h-4 w-4 mr-2" />
-                <span className="hidden sm:inline">Settings</span>
-              </Button>
+              <ThemeToggle />
             </div>
           </div>
         </div>
       </header>
 
-      <div className="container mx-auto px-4 py-8 max-w-6xl">
+      <div className="container mx-auto px-4 py-8 max-w-7xl">
         {/* Event Type Selection */}
-        <Card className="mb-8">
+        <Card className="mb-8 border-0 shadow-xl bg-card/80 backdrop-blur-sm">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Target className="h-5 w-5 text-primary" />
+              Select Event Type
+            </CardTitle>
+          </CardHeader>
           <CardContent className="p-6">
-            <h2 className="text-xl font-semibold text-gray-800 mb-4">Select Event Type</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
               {(Object.keys(eventConfigs) as EventType[]).map((eventType) => (
                 <Button
                   key={eventType}
                   variant={selectedEventType === eventType ? "default" : "outline"}
-                  className={`h-auto p-4 ${
+                  className={`h-auto p-6 transition-all duration-300 ${
                     selectedEventType === eventType
-                      ? "bg-primary text-primary-foreground"
-                      : "bg-gray-100 hover:bg-primary hover:text-primary-foreground"
+                      ? "bg-gradient-to-r from-primary to-primary/90 text-primary-foreground shadow-lg scale-105 border-primary"
+                      : "bg-gradient-to-r from-card to-muted/50 hover:from-primary/10 hover:to-primary/5 hover:scale-105 hover:shadow-lg border-border"
                   }`}
                   onClick={() => selectEventType(eventType)}
                 >
-                  <div className="flex items-center space-x-3">
-                    {getEventTypeIcon(eventType)}
+                  <div className="flex items-center space-x-4">
+                    <div className={`p-3 rounded-xl ${
+                      selectedEventType === eventType 
+                        ? "bg-white/20" 
+                        : "bg-primary/10 text-primary"
+                    }`}>
+                      {getEventTypeIcon(eventType)}
+                    </div>
                     <div className="text-left">
-                      <h3 className="font-semibold text-lg">{eventConfigs[eventType].name}</h3>
+                      <h3 className="font-bold text-lg">{eventConfigs[eventType].name}</h3>
                       <p className="text-sm opacity-70">{eventConfigs[eventType].events.length} Events</p>
                     </div>
                   </div>
@@ -291,79 +307,96 @@ export default function Calculator() {
 
         {/* Event Calculator */}
         {selectedEventType && (
-          <Card className="mb-8">
-            <CardContent className="p-6">
-              <div className="flex items-center justify-between mb-6">
-                <h2 className="text-xl font-semibold text-gray-800">
+          <Card className="mb-8 border-0 shadow-xl bg-card/80 backdrop-blur-sm">
+            <CardHeader>
+              <div className="flex items-center justify-between">
+                <CardTitle className="flex items-center gap-2">
+                  <Zap className="h-5 w-5 text-primary" />
                   {eventConfigs[selectedEventType].name} Calculator
-                  <span className="text-sm text-gray-500 ml-2">- Enter results and points</span>
-                </h2>
-                <div className="bg-gray-100 rounded-lg px-4 py-2">
-                  <span className="text-sm font-medium text-gray-600">Total Score:</span>
-                  <span className="text-2xl font-bold text-primary ml-2">{totalScore.toLocaleString()}</span>
+                  <Badge variant="outline" className="ml-2">
+                    {eventConfigs[selectedEventType].events.length} Events
+                  </Badge>
+                </CardTitle>
+                <div className="bg-gradient-to-r from-primary/10 to-primary/5 rounded-xl px-6 py-3 border border-primary/20">
+                  <div className="flex items-center gap-2">
+                    <Star className="h-5 w-5 text-primary" />
+                    <span className="text-sm font-medium text-foreground">Total Score:</span>
+                    <span className="text-2xl font-bold text-primary">{totalScore.toLocaleString()}</span>
+                  </div>
                 </div>
               </div>
-
-              <div className="space-y-4">
+            </CardHeader>
+            <CardContent className="p-6">
+              <div className="space-y-6">
                 {eventResults.map((event, index) => (
-                  <div key={index} className="bg-gray-50 rounded-lg p-4 grid grid-cols-1 md:grid-cols-3 gap-4 items-center">
-                    <div className="flex items-center space-x-3">
-                      {event.type === "time" ? (
-                        <Clock className="h-5 w-5 text-primary" />
-                      ) : (
-                        <Ruler className="h-5 w-5 text-primary" />
-                      )}
-                      <div>
-                        <h4 className="font-semibold text-gray-800">{event.name}</h4>
-                        <p className="text-sm text-gray-500">
-                          {event.type === "time" ? "Time" : "Distance/Height"} ({event.unit})
-                        </p>
+                  <div key={index} className="bg-gradient-to-r from-muted/50 to-muted/30 rounded-xl p-6 border border-border/50">
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-center">
+                      <div className="flex items-center space-x-4">
+                        <div className={`p-3 rounded-xl ${
+                          event.type === "time" 
+                            ? "bg-blue-100 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400"
+                            : "bg-green-100 text-green-600 dark:bg-green-900/30 dark:text-green-400"
+                        }`}>
+                          {event.type === "time" ? (
+                            <Clock className="h-5 w-5" />
+                          ) : (
+                            <Ruler className="h-5 w-5" />
+                          )}
+                        </div>
+                        <div>
+                          <h4 className="font-bold text-foreground">{event.name}</h4>
+                          <p className="text-sm text-muted-foreground">
+                            {event.type === "time" ? "Time" : "Distance/Height"} ({event.unit})
+                          </p>
+                        </div>
                       </div>
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor={`result-${index}`} className="text-sm font-medium text-gray-700">
-                        Result
-                      </Label>
-                      <Input
-                        id={`result-${index}`}
-                        type="text"
-                        placeholder={eventConfigs[selectedEventType].events[index].placeholder}
-                        value={event.result}
-                        onChange={(e) => updateResult(index, "result", e.target.value)}
-                        className="w-full"
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor={`points-${index}`} className="text-sm font-medium text-gray-700">
-                        Points
-                      </Label>
-                      <Input
-                        id={`points-${index}`}
-                        type="number"
-                        placeholder="0"
-                        value={event.points || ""}
-                        onChange={(e) => updateResult(index, "points", e.target.value)}
-                        className="w-full"
-                      />
+                      <div className="space-y-2">
+                        <Label htmlFor={`result-${index}`} className="text-sm font-medium text-foreground">
+                          Result
+                        </Label>
+                        <Input
+                          id={`result-${index}`}
+                          type="text"
+                          placeholder={eventConfigs[selectedEventType].events[index].placeholder}
+                          value={event.result}
+                          onChange={(e) => updateResult(index, "result", e.target.value)}
+                          className="w-full bg-background/50 backdrop-blur-sm border-border/60 focus:border-primary/50 focus:ring-primary/25"
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor={`points-${index}`} className="text-sm font-medium text-foreground">
+                          Points
+                        </Label>
+                        <Input
+                          id={`points-${index}`}
+                          type="number"
+                          placeholder="0"
+                          value={event.points || ""}
+                          onChange={(e) => updateResult(index, "points", e.target.value)}
+                          className="w-full bg-background/50 backdrop-blur-sm border-border/60 focus:border-primary/50 focus:ring-primary/25"
+                        />
+                      </div>
                     </div>
                   </div>
                 ))}
               </div>
 
-              <div className="mt-8 flex flex-col sm:flex-row gap-4">
-                <Button onClick={calculateTotal} className="flex-1">
+              <Separator className="my-8" />
+
+              <div className="flex flex-col sm:flex-row gap-4">
+                <Button onClick={calculateTotal} className="flex-1 bg-gradient-to-r from-primary to-primary/90 hover:from-primary/90 hover:to-primary/80 shadow-lg">
                   <CalculatorIcon className="h-4 w-4 mr-2" />
                   Calculate Total
                 </Button>
                 <Button 
                   onClick={savePerformance} 
                   disabled={savePerformanceMutation.isPending}
-                  className="flex-1 bg-success hover:bg-success/90 text-success-foreground"
+                  className="flex-1 bg-gradient-to-r from-success to-success/90 hover:from-success/90 hover:to-success/80 text-success-foreground shadow-lg"
                 >
                   <Save className="h-4 w-4 mr-2" />
                   Save Performance
                 </Button>
-                <Button onClick={clearAll} variant="outline">
+                <Button onClick={clearAll} variant="outline" className="border-border/60 hover:bg-muted/50">
                   <Eraser className="h-4 w-4 mr-2" />
                   Clear All
                 </Button>
@@ -373,13 +406,16 @@ export default function Calculator() {
         )}
 
         {/* Performance History */}
-        <Card>
-          <CardContent className="p-6">
-            <div className="flex items-center justify-between mb-6">
-              <h2 className="text-xl font-semibold text-gray-800">Performance History</h2>
-              <div className="flex items-center space-x-2">
+        <Card className="border-0 shadow-xl bg-card/80 backdrop-blur-sm">
+          <CardHeader>
+            <div className="flex items-center justify-between">
+              <CardTitle className="flex items-center gap-2">
+                <History className="h-5 w-5 text-primary" />
+                Performance History
+              </CardTitle>
+              <div className="flex items-center space-x-3">
                 <Select value={historyFilter} onValueChange={setHistoryFilter}>
-                  <SelectTrigger className="w-40">
+                  <SelectTrigger className="w-40 bg-background/50 backdrop-blur-sm border-border/60">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
@@ -391,41 +427,49 @@ export default function Calculator() {
                 </Select>
               </div>
             </div>
-
+          </CardHeader>
+          <CardContent className="p-6">
             {isLoading ? (
-              <div className="text-center py-8">Loading performances...</div>
+              <div className="text-center py-12">
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto mb-4"></div>
+                <p className="text-muted-foreground">Loading performances...</p>
+              </div>
             ) : performances.length === 0 ? (
-              <div className="text-center py-8 text-gray-500">
-                No performances recorded yet. Start by selecting an event type and entering results.
+              <div className="text-center py-12">
+                <div className="bg-muted/50 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
+                  <Trophy className="h-8 w-8 text-muted-foreground" />
+                </div>
+                <p className="text-muted-foreground">No performances recorded yet.</p>
+                <p className="text-sm text-muted-foreground mt-1">Start by selecting an event type and entering results.</p>
               </div>
             ) : (
               <div className="overflow-x-auto">
                 <Table>
                   <TableHeader>
-                    <TableRow>
-                      <TableHead>Date</TableHead>
-                      <TableHead>Event Type</TableHead>
-                      <TableHead>Total Score</TableHead>
-                      <TableHead>Actions</TableHead>
+                    <TableRow className="border-border/50">
+                      <TableHead className="text-foreground font-semibold">Date</TableHead>
+                      <TableHead className="text-foreground font-semibold">Event Type</TableHead>
+                      <TableHead className="text-foreground font-semibold">Total Score</TableHead>
+                      <TableHead className="text-foreground font-semibold">Actions</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
                     {performances.map((performance) => (
-                      <TableRow key={performance.id}>
-                        <TableCell className="text-sm">
+                      <TableRow key={performance.id} className="border-border/50 hover:bg-muted/30 transition-colors">
+                        <TableCell className="text-sm text-foreground">
                           {new Date(performance.date).toLocaleDateString()}
                         </TableCell>
                         <TableCell>
-                          <Badge className={getEventTypeBadgeColor(performance.eventType)}>
+                          <Badge className={`${getEventTypeBadgeColor(performance.eventType)} border-0`}>
                             {performance.eventType}
                           </Badge>
                         </TableCell>
-                        <TableCell className="font-semibold text-primary">
+                        <TableCell className="font-bold text-primary text-lg">
                           {performance.totalScore.toLocaleString()}
                         </TableCell>
                         <TableCell>
                           <div className="flex space-x-2">
-                            <Button variant="ghost" size="sm">
+                            <Button variant="ghost" size="sm" className="hover:bg-primary/10 hover:text-primary">
                               <Eye className="h-4 w-4" />
                             </Button>
                             <Button 
@@ -433,8 +477,9 @@ export default function Calculator() {
                               size="sm"
                               onClick={() => deletePerformance(performance.id)}
                               disabled={deletePerformanceMutation.isPending}
+                              className="hover:bg-destructive/10 hover:text-destructive"
                             >
-                              <Trash2 className="h-4 w-4 text-red-600" />
+                              <Trash2 className="h-4 w-4" />
                             </Button>
                           </div>
                         </TableCell>
