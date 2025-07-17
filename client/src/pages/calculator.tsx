@@ -8,8 +8,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
-import { ThemeToggle } from "@/components/ui/theme-toggle";
-import { Trash2, Eye, Calculator as CalculatorIcon, Save, Eraser, Trophy, Medal, Crown, Clock, Ruler, History, Settings, Target, Zap, Star } from "lucide-react";
+
+import { Trash2, Eye, Calculator as CalculatorIcon, Save, Eraser, Trophy, Medal, Crown, Clock, Ruler, Target, Zap, Star, History } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { queryClient } from "@/lib/queryClient";
 import { apiRequest } from "@/lib/queryClient";
@@ -307,16 +307,9 @@ export default function Calculator() {
                 <CalculatorIcon className="h-6 w-6 text-white" />
               </div>
               <div>
-                <h1 className="text-2xl font-semibold tracking-tight text-white">Athletics Calculator</h1>
-                <p className="text-white/90 text-xs mt-0.5 font-medium tracking-wide">Multi-Event Performance Tracker</p>
+                <h1 className="text-2xl font-semibold tracking-tight text-white">Multi Smackdown</h1>
+                <p className="text-white/90 text-xs mt-0.5 font-medium tracking-wide">A Track & Field Multi event calculator</p>
               </div>
-            </div>
-            <div className="flex items-center space-x-2">
-              <Button className="glass-button text-white hover:text-white text-sm px-3 py-1">
-                <History className="h-3 w-3 mr-1" />
-                <span className="hidden sm:inline">History</span>
-              </Button>
-              <ThemeToggle />
             </div>
           </div>
         </div>
@@ -480,7 +473,7 @@ export default function Calculator() {
             <div className="flex items-center justify-between">
               <CardTitle className="flex items-center gap-2 text-lg font-semibold tracking-wide">
                 <div className="glass-icon-container w-6 h-6 flex items-center justify-center bg-gradient-to-br from-green-500/20 to-emerald-500/20 border-green-400/30">
-                  <History className="h-3 w-3 text-white" />
+                  <Trophy className="h-3 w-3 text-white" />
                 </div>
                 Performance History
               </CardTitle>
