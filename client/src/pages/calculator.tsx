@@ -8,7 +8,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 
-import { Trash2, Eye, Calculator as CalculatorIcon, Save, Eraser, Trophy, Medal, Crown, Clock, Ruler, Target, Zap, Star, History, ToggleLeft, ToggleRight, Award, BarChart3 } from "lucide-react";
+import { Trash2, Eye, Calculator as CalculatorIcon, Save, Eraser, Trophy, Medal, Crown, Clock, Ruler, Target, Zap, Star, History, ToggleLeft, ToggleRight, Award, BarChart3, Download } from "lucide-react";
 import { Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, ResponsiveContainer, Legend, Tooltip } from 'recharts';
 import { useToast } from "@/hooks/use-toast";
 import { type EventResult } from "@shared/schema";
@@ -25,8 +25,49 @@ import {
   type StoredAchievement,
   generateId
 } from "@/lib/localStorage";
+import { handleInstallClick } from "@/lib/pwa";
 
 type EventType = "decathlon" | "heptathlon" | "pentathlon";
+
+// InstallButton component to handle PWA installation
+function InstallButton() {
+  const [showInstallButton, setShowInstallButton] = useState(false);
+
+  useEffect(() => {
+    // Check if app is already installed
+    const isAppInstalled = window.navigator.standalone === true || 
+                          window.matchMedia('(display-mode: standalone)').matches;
+    
+    if (!isAppInstalled) {
+      // Listen for install prompt
+      const handleBeforeInstallPrompt = (e: Event) => {
+        e.preventDefault();
+        setShowInstallButton(true);
+      };
+
+      window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+      
+      return () => {
+        window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+      };
+    }
+  }, []);
+
+  if (!showInstallButton) return null;
+
+  return (
+    <Button
+      onClick={() => {
+        handleInstallClick();
+        setShowInstallButton(false);
+      }}
+      className="glass-button text-white hover:text-white text-sm px-3 py-1"
+    >
+      <Download className="h-4 w-4 mr-1" />
+      Install App
+    </Button>
+  );
+}
 
 const eventConfigs = {
   decathlon: {
@@ -415,6 +456,7 @@ export default function Calculator() {
                 {isMetric ? <ToggleRight className="h-4 w-4 mr-1" /> : <ToggleLeft className="h-4 w-4 mr-1" />}
                 {isMetric ? "Metric" : "Imperial"}
               </Button>
+              <InstallButton />
             </div>
           </div>
         </div>
