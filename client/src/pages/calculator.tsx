@@ -73,38 +73,38 @@ const eventConfigs = {
   decathlon: {
     name: "Decathlon",
     events: [
-      { name: "100m", type: "time" as const, unit: "seconds", placeholder: "10.45" },
-      { name: "Long Jump", type: "measurement" as const, unit: "meters", placeholder: "7.50" },
-      { name: "Shot Put", type: "measurement" as const, unit: "meters", placeholder: "16.20" },
-      { name: "High Jump", type: "measurement" as const, unit: "meters", placeholder: "2.10" },
-      { name: "400m", type: "time" as const, unit: "seconds", placeholder: "48.25" },
-      { name: "110m Hurdles", type: "time" as const, unit: "seconds", placeholder: "13.80" },
-      { name: "Discus", type: "measurement" as const, unit: "meters", placeholder: "48.50" },
-      { name: "Pole Vault", type: "measurement" as const, unit: "meters", placeholder: "5.20" },
-      { name: "Javelin", type: "measurement" as const, unit: "meters", placeholder: "65.40" },
-      { name: "1500m", type: "time" as const, unit: "seconds", placeholder: "4:25.50" }
+      { name: "100m", type: "time" as const, unit: "seconds", placeholder: "10.45", day: 1 },
+      { name: "Long Jump", type: "measurement" as const, unit: "meters", placeholder: "7.50", day: 1 },
+      { name: "Shot Put", type: "measurement" as const, unit: "meters", placeholder: "16.20", day: 1 },
+      { name: "High Jump", type: "measurement" as const, unit: "meters", placeholder: "2.10", day: 1 },
+      { name: "400m", type: "time" as const, unit: "seconds", placeholder: "48.25", day: 1 },
+      { name: "110m Hurdles", type: "time" as const, unit: "seconds", placeholder: "13.80", day: 2 },
+      { name: "Discus", type: "measurement" as const, unit: "meters", placeholder: "48.50", day: 2 },
+      { name: "Pole Vault", type: "measurement" as const, unit: "meters", placeholder: "5.20", day: 2 },
+      { name: "Javelin", type: "measurement" as const, unit: "meters", placeholder: "65.40", day: 2 },
+      { name: "1500m", type: "time" as const, unit: "seconds", placeholder: "4:25.50", day: 2 }
     ]
   },
   heptathlon: {
     name: "Heptathlon",
     events: [
-      { name: "100m Hurdles", type: "time" as const, unit: "seconds", placeholder: "13.24" },
-      { name: "High Jump", type: "measurement" as const, unit: "meters", placeholder: "1.85" },
-      { name: "Shot Put", type: "measurement" as const, unit: "meters", placeholder: "14.50" },
-      { name: "200m", type: "time" as const, unit: "seconds", placeholder: "23.45" },
-      { name: "Long Jump", type: "measurement" as const, unit: "meters", placeholder: "6.50" },
-      { name: "Javelin", type: "measurement" as const, unit: "meters", placeholder: "55.20" },
-      { name: "800m", type: "time" as const, unit: "seconds", placeholder: "2:10.50" }
+      { name: "100m Hurdles", type: "time" as const, unit: "seconds", placeholder: "13.24", day: 1 },
+      { name: "High Jump", type: "measurement" as const, unit: "meters", placeholder: "1.85", day: 1 },
+      { name: "Shot Put", type: "measurement" as const, unit: "meters", placeholder: "14.50", day: 1 },
+      { name: "200m", type: "time" as const, unit: "seconds", placeholder: "23.45", day: 1 },
+      { name: "Long Jump", type: "measurement" as const, unit: "meters", placeholder: "6.50", day: 2 },
+      { name: "Javelin", type: "measurement" as const, unit: "meters", placeholder: "55.20", day: 2 },
+      { name: "800m", type: "time" as const, unit: "seconds", placeholder: "2:10.50", day: 2 }
     ]
   },
   pentathlon: {
     name: "Pentathlon",
     events: [
-      { name: "100m Hurdles", type: "time" as const, unit: "seconds", placeholder: "13.24" },
-      { name: "High Jump", type: "measurement" as const, unit: "meters", placeholder: "1.85" },
-      { name: "Shot Put", type: "measurement" as const, unit: "meters", placeholder: "14.50" },
-      { name: "200m", type: "time" as const, unit: "seconds", placeholder: "23.45" },
-      { name: "800m", type: "time" as const, unit: "seconds", placeholder: "2:10.50" }
+      { name: "100m Hurdles", type: "time" as const, unit: "seconds", placeholder: "13.24", day: 1 },
+      { name: "High Jump", type: "measurement" as const, unit: "meters", placeholder: "1.85", day: 1 },
+      { name: "Shot Put", type: "measurement" as const, unit: "meters", placeholder: "14.50", day: 1 },
+      { name: "200m", type: "time" as const, unit: "seconds", placeholder: "23.45", day: 1 },
+      { name: "800m", type: "time" as const, unit: "seconds", placeholder: "2:10.50", day: 1 }
     ]
   }
 };
@@ -124,7 +124,8 @@ export default function Calculator() {
         result: "",
         points: 0,
         type: event.type,
-        unit: event.unit
+        unit: event.unit,
+        day: event.day
       }));
       setEventResults(newResults);
     }
@@ -315,7 +316,8 @@ export default function Calculator() {
       result: "",
       points: 0,
       type: event.type,
-      unit: event.unit
+      unit: event.unit,
+      day: event.day
     }));
     setEventResults(newResults);
     setTotalScore(0);
@@ -383,7 +385,8 @@ export default function Calculator() {
         result: "",
         points: 0,
         type: event.type,
-        unit: event.unit
+        unit: event.unit,
+        day: event.day
       }));
       setEventResults(newResults);
       setTotalScore(0);
@@ -431,6 +434,35 @@ export default function Calculator() {
       case "decathlon": return "bg-blue-500/20 text-blue-200 border-blue-400/30";
       default: return "bg-gray-500/20 text-gray-200 border-gray-400/30";
     }
+  };
+
+  const getDaySubtotal = (day: number) => {
+    return eventResults
+      .filter(event => event.day === day)
+      .reduce((sum, event) => sum + event.points, 0);
+  };
+
+  const getEventsByDay = (day: number) => {
+    return eventResults.filter(event => event.day === day);
+  };
+
+  const hasMultipleDays = () => {
+    return selectedEventType === "decathlon" || selectedEventType === "heptathlon";
+  };
+
+  const getPerformanceDayTotal = (performance: StoredPerformance, day: number) => {
+    if (!performance.eventResults || !Array.isArray(performance.eventResults)) return 0;
+    
+    // Get the event config for this event type
+    const config = eventConfigs[performance.eventType as EventType];
+    if (!config) return 0;
+    
+    return performance.eventResults
+      .filter((result: any, index: number) => {
+        const eventConfig = config.events[index];
+        return eventConfig && eventConfig.day === day;
+      })
+      .reduce((sum: number, result: any) => sum + (result.points || 0), 0);
   };
 
   return (
@@ -533,62 +565,144 @@ export default function Calculator() {
               </div>
             </CardHeader>
             <CardContent className="p-4">
-              <div className="space-y-3">
-                {eventResults.map((event, index) => (
-                  <div key={index} className="glass-event-card p-3">
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-3 items-center">
-                      <div className="flex items-center space-x-2">
-                        <div className={`p-2 glass-card transition-all duration-200 ${
-                          event.type === "time" 
-                            ? "bg-blue-500/20 text-blue-200 border-blue-400/30"
-                            : "bg-purple-500/20 text-purple-200 border-purple-400/30"
-                        }`}>
-                          {event.type === "time" ? (
-                            <Clock className="h-4 w-4" />
-                          ) : (
-                            <Ruler className="h-4 w-4" />
-                          )}
-                        </div>
-                        <div>
-                          <h4 className="font-semibold text-foreground text-sm">{event.name}</h4>
-                          <p className="text-xs text-muted-foreground font-medium tracking-wide">
-                            {event.type === "time" ? "Time" : getEventDescription(event.name)} ({getEventUnit(event.name)})
-                          </p>
+              <div className="space-y-4">
+                {hasMultipleDays() ? (
+                  // Show events organized by day
+                  [1, 2].map(day => (
+                    <div key={day} className="space-y-3">
+                      <div className="flex items-center justify-between">
+                        <h3 className="text-sm font-bold text-foreground flex items-center gap-2">
+                          <div className="glass-icon-container w-5 h-5 flex items-center justify-center bg-gradient-to-br from-orange-500/20 to-red-500/20 border-orange-400/30">
+                            <span className="text-xs font-bold text-white">{day}</span>
+                          </div>
+                          Day {day}
+                        </h3>
+                        <div className="glass-card bg-gradient-to-r from-orange-500/20 to-red-500/20 border-orange-400/30 px-3 py-1">
+                          <div className="flex items-center gap-2">
+                            <span className="text-xs font-semibold text-white">Day {day} Total:</span>
+                            <span className="text-sm font-bold text-white">{getDaySubtotal(day).toLocaleString()}</span>
+                          </div>
                         </div>
                       </div>
-                      <div className="space-y-1">
-                        <Label htmlFor={`result-${index}`} className="text-xs font-semibold text-foreground tracking-wide">
-                          Result {!isMetric && (event.name === "Long Jump" || event.name === "High Jump" || event.name === "Shot Put" || event.name === "Discus" || event.name === "Javelin" || event.name === "Pole Vault") && event.result && (
-                            <span className="text-muted-foreground/60 font-normal">
-                              ({(parseFloat(event.result) * 0.3048).toFixed(2)}m)
-                            </span>
-                          )}
-                        </Label>
-                        <Input
-                          id={`result-${index}`}
-                          type="text"
-                          placeholder={getPlaceholder(event.name)}
-                          value={event.result}
-                          onChange={(e) => updateResult(index, "result", e.target.value)}
-                          className="w-full glass-input text-foreground text-sm"
-                        />
-                      </div>
-                      <div className="space-y-1">
-                        <Label htmlFor={`points-${index}`} className="text-xs font-semibold text-foreground tracking-wide">
-                          Points
-                        </Label>
-                        <Input
-                          id={`points-${index}`}
-                          type="number"
-                          placeholder="0"
-                          value={event.points || ""}
-                          onChange={(e) => updateResult(index, "points", e.target.value)}
-                          className="w-full glass-input text-foreground text-sm"
-                        />
+                      
+                      {getEventsByDay(day).map((event, index) => {
+                        const originalIndex = eventResults.findIndex(e => e.name === event.name);
+                        return (
+                          <div key={originalIndex} className="glass-event-card p-3">
+                            <div className="grid grid-cols-1 md:grid-cols-3 gap-3 items-center">
+                              <div className="flex items-center space-x-2">
+                                <div className={`p-2 glass-card transition-all duration-200 ${
+                                  event.type === "time" 
+                                    ? "bg-blue-500/20 text-blue-200 border-blue-400/30"
+                                    : "bg-purple-500/20 text-purple-200 border-purple-400/30"
+                                }`}>
+                                  {event.type === "time" ? (
+                                    <Clock className="h-4 w-4" />
+                                  ) : (
+                                    <Ruler className="h-4 w-4" />
+                                  )}
+                                </div>
+                                <div>
+                                  <h4 className="font-semibold text-foreground text-sm">{event.name}</h4>
+                                  <p className="text-xs text-muted-foreground font-medium tracking-wide">
+                                    {event.type === "time" ? "Time" : getEventDescription(event.name)} ({getEventUnit(event.name)})
+                                  </p>
+                                </div>
+                              </div>
+                              <div className="space-y-1">
+                                <Label htmlFor={`result-${originalIndex}`} className="text-xs font-semibold text-foreground tracking-wide">
+                                  Result {!isMetric && (event.name === "Long Jump" || event.name === "High Jump" || event.name === "Shot Put" || event.name === "Discus" || event.name === "Javelin" || event.name === "Pole Vault") && event.result && (
+                                    <span className="text-muted-foreground/60 font-normal">
+                                      ({(parseFloat(event.result) * 0.3048).toFixed(2)}m)
+                                    </span>
+                                  )}
+                                </Label>
+                                <Input
+                                  id={`result-${originalIndex}`}
+                                  type="text"
+                                  placeholder={getPlaceholder(event.name)}
+                                  value={event.result}
+                                  onChange={(e) => updateResult(originalIndex, "result", e.target.value)}
+                                  className="w-full glass-input text-foreground text-sm"
+                                />
+                              </div>
+                              <div className="space-y-1">
+                                <Label htmlFor={`points-${originalIndex}`} className="text-xs font-semibold text-foreground tracking-wide">
+                                  Points
+                                </Label>
+                                <Input
+                                  id={`points-${originalIndex}`}
+                                  type="number"
+                                  placeholder="0"
+                                  value={event.points || ""}
+                                  onChange={(e) => updateResult(originalIndex, "points", e.target.value)}
+                                  className="w-full glass-input text-foreground text-sm"
+                                />
+                              </div>
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  ))
+                ) : (
+                  // Show events in single list for pentathlon
+                  eventResults.map((event, index) => (
+                    <div key={index} className="glass-event-card p-3">
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-3 items-center">
+                        <div className="flex items-center space-x-2">
+                          <div className={`p-2 glass-card transition-all duration-200 ${
+                            event.type === "time" 
+                              ? "bg-blue-500/20 text-blue-200 border-blue-400/30"
+                              : "bg-purple-500/20 text-purple-200 border-purple-400/30"
+                          }`}>
+                            {event.type === "time" ? (
+                              <Clock className="h-4 w-4" />
+                            ) : (
+                              <Ruler className="h-4 w-4" />
+                            )}
+                          </div>
+                          <div>
+                            <h4 className="font-semibold text-foreground text-sm">{event.name}</h4>
+                            <p className="text-xs text-muted-foreground font-medium tracking-wide">
+                              {event.type === "time" ? "Time" : getEventDescription(event.name)} ({getEventUnit(event.name)})
+                            </p>
+                          </div>
+                        </div>
+                        <div className="space-y-1">
+                          <Label htmlFor={`result-${index}`} className="text-xs font-semibold text-foreground tracking-wide">
+                            Result {!isMetric && (event.name === "Long Jump" || event.name === "High Jump" || event.name === "Shot Put" || event.name === "Discus" || event.name === "Javelin" || event.name === "Pole Vault") && event.result && (
+                              <span className="text-muted-foreground/60 font-normal">
+                                ({(parseFloat(event.result) * 0.3048).toFixed(2)}m)
+                              </span>
+                            )}
+                          </Label>
+                          <Input
+                            id={`result-${index}`}
+                            type="text"
+                            placeholder={getPlaceholder(event.name)}
+                            value={event.result}
+                            onChange={(e) => updateResult(index, "result", e.target.value)}
+                            className="w-full glass-input text-foreground text-sm"
+                          />
+                        </div>
+                        <div className="space-y-1">
+                          <Label htmlFor={`points-${index}`} className="text-xs font-semibold text-foreground tracking-wide">
+                            Points
+                          </Label>
+                          <Input
+                            id={`points-${index}`}
+                            type="number"
+                            placeholder="0"
+                            value={event.points || ""}
+                            onChange={(e) => updateResult(index, "points", e.target.value)}
+                            className="w-full glass-input text-foreground text-sm"
+                          />
+                        </div>
                       </div>
                     </div>
-                  </div>
-                ))}
+                  ))
+                )}
               </div>
 
               <div className="mb-3 mt-3">
@@ -670,6 +784,8 @@ export default function Calculator() {
                           <TableHead className="text-foreground font-black tracking-wide">Date</TableHead>
                           <TableHead className="text-foreground font-black tracking-wide">Label</TableHead>
                           <TableHead className="text-foreground font-black tracking-wide">Event Type</TableHead>
+                          <TableHead className="text-foreground font-black tracking-wide">Day 1</TableHead>
+                          <TableHead className="text-foreground font-black tracking-wide">Day 2</TableHead>
                           <TableHead className="text-foreground font-black tracking-wide">Total Score</TableHead>
                           <TableHead className="text-foreground font-black tracking-wide">Actions</TableHead>
                         </TableRow>
@@ -696,6 +812,20 @@ export default function Calculator() {
                               <Badge className={`${getEventTypeBadgeColor(performance.eventType)} glass-badge text-xs`}>
                                 {performance.eventType}
                               </Badge>
+                            </TableCell>
+                            <TableCell className="font-black text-white text-sm py-2">
+                              {performance.eventType === "decathlon" || performance.eventType === "heptathlon" ? (
+                                getPerformanceDayTotal(performance, 1).toLocaleString()
+                              ) : (
+                                <span className="text-muted-foreground font-normal">—</span>
+                              )}
+                            </TableCell>
+                            <TableCell className="font-black text-white text-sm py-2">
+                              {performance.eventType === "decathlon" || performance.eventType === "heptathlon" ? (
+                                getPerformanceDayTotal(performance, 2).toLocaleString()
+                              ) : (
+                                <span className="text-muted-foreground font-normal">—</span>
+                              )}
                             </TableCell>
                             <TableCell className="font-black text-white text-sm py-2">
                               {performance.totalScore.toLocaleString()}

@@ -59,6 +59,7 @@ export type EventResult = {
   points: number;
   type: 'time' | 'measurement';
   unit: string;
+  day?: number;
 };
 
 export type EventConfig = {
@@ -68,5 +69,6 @@ export type EventConfig = {
     type: 'time' | 'measurement';
     unit: string;
     placeholder: string;
+    day?: number;
   }>;
 };
