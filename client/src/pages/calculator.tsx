@@ -17,6 +17,7 @@ import { apiRequest } from "@/lib/queryClient";
 import { type Performance, type EventResult, type Achievement } from "@shared/schema";
 import { calculatePoints, estimateResult } from "@/lib/scoring";
 import AchievementTimeline from "@/components/AchievementTimeline";
+import { storePerformanceOffline, isOnline } from "@/lib/pwa";
 
 type EventType = "decathlon" | "heptathlon" | "pentathlon";
 
