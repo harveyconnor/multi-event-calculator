@@ -96,7 +96,8 @@ export default function Calculator() {
 
   const savePerformanceMutation = useMutation({
     mutationFn: async (performance: { uuid: string; eventType: string; eventResults: EventResult[]; totalScore: number; label?: string }) => {
-      return await apiRequest("POST", "/api/performances", performance);
+      const response = await apiRequest("POST", "/api/performances", performance);
+      return await response.json();
     },
     onSuccess: (savedPerformance) => {
       queryClient.invalidateQueries({ queryKey: ["/api/performances"] });
@@ -119,7 +120,8 @@ export default function Calculator() {
 
   const updatePerformanceMutation = useMutation({
     mutationFn: async (performance: { uuid: string; eventType: string; eventResults: EventResult[]; totalScore: number; label?: string }) => {
-      return await apiRequest("PUT", `/api/performances/${performance.uuid}`, performance);
+      const response = await apiRequest("PUT", `/api/performances/${performance.uuid}`, performance);
+      return await response.json();
     },
     onSuccess: (updatedPerformance) => {
       queryClient.invalidateQueries({ queryKey: ["/api/performances"] });
@@ -141,7 +143,8 @@ export default function Calculator() {
 
   const deletePerformanceMutation = useMutation({
     mutationFn: async (id: number) => {
-      return await apiRequest("DELETE", `/api/performances/${id}`);
+      const response = await apiRequest("DELETE", `/api/performances/${id}`);
+      return await response.json();
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/performances"] });
