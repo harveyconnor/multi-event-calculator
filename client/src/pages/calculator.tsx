@@ -101,6 +101,10 @@ export default function Calculator() {
     if (eventName.includes("m") || eventName.includes("Hurdles")) {
       return "seconds";
     }
+    // Always show meters for Long Jump and High Jump
+    if (eventName === "Long Jump" || eventName === "High Jump") {
+      return "meters";
+    }
     return isMetric ? "meters" : "feet";
   };
 
