@@ -7,7 +7,7 @@ This is a full-stack web application for calculating and tracking track and fiel
 ## User Preferences
 
 Preferred communication style: Simple, everyday language.
-Design theme: Neubrutalism - bold colors, thick borders, sharp geometric shapes, high contrast.
+Design theme: Glassmorphism - translucent elements, blur effects, subtle gradients, layered transparency.
 
 ## System Architecture
 
@@ -67,7 +67,7 @@ Design theme: Neubrutalism - bold colors, thick borders, sharp geometric shapes,
 - **Performance Tracking**: Historical performance data with date tracking
 - **Performance Labels**: Optional labels for performances (e.g., "Personal Best", "Competition")
 - **Responsive Design**: Mobile-optimized interface with adaptive components
-- **Neubrutalism Design**: Bold, high-contrast UI with thick borders, sharp corners, and vibrant colors
+- **Glassmorphism Design**: Translucent UI elements with blur effects, subtle gradients, and layered transparency
 - **Dark Mode Support**: System theme detection with manual toggle between light/dark/system modes
 
 ## Data Flow

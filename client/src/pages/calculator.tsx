@@ -241,14 +241,14 @@ export default function Calculator() {
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen glass-background">
       {/* Header */}
-      <header className="brutal-header text-primary-foreground">
+      <header className="glass-header text-white">
         <div className="container mx-auto px-4 py-8">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
-              <div className="p-3 bg-accent border-4 border-border brutal-border">
-                <CalculatorIcon className="h-8 w-8 text-accent-foreground" />
+              <div className="p-3 glass-card">
+                <CalculatorIcon className="h-8 w-8 text-white" />
               </div>
               <div>
                 <h1 className="text-4xl font-black tracking-tight uppercase text-white">ATHLETICS CALCULATOR</h1>
@@ -256,7 +256,7 @@ export default function Calculator() {
               </div>
             </div>
             <div className="flex items-center space-x-3">
-              <Button className="brutal-button bg-secondary text-secondary-foreground hover:bg-secondary/90">
+              <Button className="glass-button text-white hover:text-white">
                 <History className="h-4 w-4 mr-2" />
                 <span className="hidden sm:inline">HISTORY</span>
               </Button>
@@ -268,7 +268,7 @@ export default function Calculator() {
 
       <div className="container mx-auto px-4 py-8 max-w-7xl">
         {/* Event Type Selection */}
-        <Card className="mb-8 brutal-card bg-card">
+        <Card className="mb-8 glass-card">
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-2xl font-black uppercase tracking-wide">
               <Target className="h-6 w-6 text-primary" />
@@ -280,10 +280,10 @@ export default function Calculator() {
               {(Object.keys(eventConfigs) as EventType[]).map((eventType) => (
                 <Button
                   key={eventType}
-                  className={`h-auto p-6 brutal-button ${
+                  className={`h-auto p-6 glass-button ${
                     selectedEventType === eventType
-                      ? "bg-primary text-primary-foreground"
-                      : "bg-card text-card-foreground hover:bg-muted"
+                      ? "bg-blue-500/30 text-white border-blue-400/50"
+                      : "text-foreground hover:text-foreground"
                   }`}
                   onClick={() => selectEventType(eventType)}
                 >
@@ -308,7 +308,7 @@ export default function Calculator() {
 
         {/* Event Calculator */}
         {selectedEventType && (
-          <Card className="mb-8 brutal-card bg-card">
+          <Card className="mb-8 glass-card">
             <CardHeader>
               <div className="flex items-center justify-between">
                 <CardTitle className="flex items-center gap-2 text-2xl font-black uppercase tracking-wide">
@@ -330,13 +330,13 @@ export default function Calculator() {
             <CardContent className="p-6">
               <div className="space-y-6">
                 {eventResults.map((event, index) => (
-                  <div key={index} className="brutal-event-card bg-muted p-6">
+                  <div key={index} className="glass-event-card p-6">
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-center">
                       <div className="flex items-center space-x-4">
-                        <div className={`p-3 border-3 border-border ${
+                        <div className={`p-3 glass-card ${
                           event.type === "time" 
-                            ? "bg-secondary text-secondary-foreground"
-                            : "bg-accent text-accent-foreground"
+                            ? "bg-blue-500/20 text-blue-200"
+                            : "bg-purple-500/20 text-purple-200"
                         }`}>
                           {event.type === "time" ? (
                             <Clock className="h-5 w-5" />
@@ -361,7 +361,7 @@ export default function Calculator() {
                           placeholder={eventConfigs[selectedEventType].events[index].placeholder}
                           value={event.result}
                           onChange={(e) => updateResult(index, "result", e.target.value)}
-                          className="w-full brutal-input bg-input text-foreground"
+                          className="w-full glass-input text-foreground"
                         />
                       </div>
                       <div className="space-y-2">
@@ -374,7 +374,7 @@ export default function Calculator() {
                           placeholder="0"
                           value={event.points || ""}
                           onChange={(e) => updateResult(index, "points", e.target.value)}
-                          className="w-full brutal-input bg-input text-foreground"
+                          className="w-full glass-input text-foreground"
                         />
                       </div>
                     </div>
@@ -394,12 +394,12 @@ export default function Calculator() {
                   placeholder="e.g., 'Personal Best', 'Competition', 'Training'"
                   value={performanceLabel}
                   onChange={(e) => setPerformanceLabel(e.target.value)}
-                  className="mt-2 brutal-input bg-input text-foreground"
+                  className="mt-2 glass-input text-foreground"
                 />
               </div>
 
               <div className="flex justify-center">
-                <Button onClick={clearAll} className="brutal-button bg-destructive text-destructive-foreground">
+                <Button onClick={clearAll} className="glass-button bg-red-500/20 text-red-200 hover:bg-red-500/30">
                   <Eraser className="h-4 w-4 mr-2" />
                   CLEAR ALL
                 </Button>
@@ -409,7 +409,7 @@ export default function Calculator() {
         )}
 
         {/* Performance History */}
-        <Card className="brutal-card bg-card">
+        <Card className="glass-card">
           <CardHeader>
             <div className="flex items-center justify-between">
               <CardTitle className="flex items-center gap-2 text-2xl font-black uppercase tracking-wide">
@@ -418,7 +418,7 @@ export default function Calculator() {
               </CardTitle>
               <div className="flex items-center space-x-3">
                 <Select value={historyFilter} onValueChange={setHistoryFilter}>
-                  <SelectTrigger className="w-40 brutal-select bg-input text-foreground">
+                  <SelectTrigger className="w-40 glass-select text-foreground">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
@@ -447,7 +447,7 @@ export default function Calculator() {
               </div>
             ) : (
               <div className="overflow-x-auto">
-                <Table className="brutal-table">
+                <Table className="glass-table">
                   <TableHeader>
                     <TableRow>
                       <TableHead className="text-foreground font-black uppercase tracking-wide">DATE</TableHead>
@@ -465,7 +465,7 @@ export default function Calculator() {
                         </TableCell>
                         <TableCell className="text-sm text-foreground font-bold">
                           {performance.label ? (
-                            <Badge className="brutal-badge bg-muted text-muted-foreground">
+                            <Badge className="glass-badge bg-muted text-muted-foreground">
                               {performance.label}
                             </Badge>
                           ) : (
@@ -473,7 +473,7 @@ export default function Calculator() {
                           )}
                         </TableCell>
                         <TableCell>
-                          <Badge className={`${getEventTypeBadgeColor(performance.eventType)} brutal-badge`}>
+                          <Badge className={`${getEventTypeBadgeColor(performance.eventType)} glass-badge`}>
                             {performance.eventType}
                           </Badge>
                         </TableCell>
@@ -482,14 +482,14 @@ export default function Calculator() {
                         </TableCell>
                         <TableCell>
                           <div className="flex space-x-2">
-                            <Button size="sm" className="brutal-button bg-accent text-accent-foreground p-2">
+                            <Button size="sm" className="glass-button bg-blue-500/20 text-blue-200 p-2">
                               <Eye className="h-4 w-4" />
                             </Button>
                             <Button 
                               size="sm"
                               onClick={() => deletePerformance(performance.id)}
                               disabled={deletePerformanceMutation.isPending}
-                              className="brutal-button bg-destructive text-destructive-foreground p-2"
+                              className="glass-button bg-red-500/20 text-red-200 p-2"
                             >
                               <Trash2 className="h-4 w-4" />
                             </Button>
