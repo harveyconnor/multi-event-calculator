@@ -7,6 +7,7 @@ This is a full-stack web application for calculating and tracking track and fiel
 ## User Preferences
 
 Preferred communication style: Simple, everyday language.
+Design theme: Neubrutalism - bold colors, thick borders, sharp geometric shapes, high contrast.
 
 ## System Architecture
 
@@ -65,6 +66,8 @@ Preferred communication style: Simple, everyday language.
 - **Results Display**: Table view of all results with sorting and filtering
 - **Performance Tracking**: Historical performance data with date tracking
 - **Responsive Design**: Mobile-optimized interface with adaptive components
+- **Neubrutalism Design**: Bold, high-contrast UI with thick borders, sharp corners, and vibrant colors
+- **Dark Mode Support**: System theme detection with manual toggle between light/dark/system modes
 
 ## Data Flow
 

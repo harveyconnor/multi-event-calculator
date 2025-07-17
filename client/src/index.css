@@ -3,53 +3,53 @@
 @tailwind utilities;
 
 :root {
-  --background: hsl(0, 0%, 100%);
-  --foreground: hsl(222.2, 84%, 4.9%);
-  --muted: hsl(210, 40%, 98%);
-  --muted-foreground: hsl(215.4, 16.3%, 46.9%);
-  --popover: hsl(0, 0%, 100%);
-  --popover-foreground: hsl(222.2, 84%, 4.9%);
+  --background: hsl(48, 100%, 95%);
+  --foreground: hsl(0, 0%, 0%);
+  --muted: hsl(120, 100%, 95%);
+  --muted-foreground: hsl(0, 0%, 25%);
+  --popover: hsl(48, 100%, 95%);
+  --popover-foreground: hsl(0, 0%, 0%);
   --card: hsl(0, 0%, 100%);
-  --card-foreground: hsl(222.2, 84%, 4.9%);
-  --border: hsl(214.3, 31.8%, 91.4%);
-  --input: hsl(214.3, 31.8%, 91.4%);
-  --primary: hsl(221.2, 83.2%, 53.3%);
-  --primary-foreground: hsl(210, 40%, 98%);
-  --secondary: hsl(210, 40%, 96%);
-  --secondary-foreground: hsl(222.2, 84%, 4.9%);
-  --accent: hsl(210, 40%, 96%);
-  --accent-foreground: hsl(222.2, 84%, 4.9%);
-  --destructive: hsl(0, 84.2%, 60.2%);
-  --destructive-foreground: hsl(210, 40%, 98%);
-  --success: hsl(142.1, 76.2%, 36.3%);
-  --success-foreground: hsl(355.7, 100%, 97.3%);
-  --ring: hsl(221.2, 83.2%, 53.3%);
-  --radius: 0.5rem;
+  --card-foreground: hsl(0, 0%, 0%);
+  --border: hsl(0, 0%, 0%);
+  --input: hsl(0, 0%, 100%);
+  --primary: hsl(280, 100%, 50%);
+  --primary-foreground: hsl(0, 0%, 100%);
+  --secondary: hsl(60, 100%, 50%);
+  --secondary-foreground: hsl(0, 0%, 0%);
+  --accent: hsl(180, 100%, 50%);
+  --accent-foreground: hsl(0, 0%, 0%);
+  --destructive: hsl(0, 100%, 50%);
+  --destructive-foreground: hsl(0, 0%, 100%);
+  --success: hsl(120, 100%, 30%);
+  --success-foreground: hsl(0, 0%, 100%);
+  --ring: hsl(280, 100%, 50%);
+  --radius: 0rem;
 }
 
 .dark {
-  --background: hsl(222.2, 84%, 4.9%);
-  --foreground: hsl(210, 40%, 98%);
-  --muted: hsl(217.2, 32.6%, 17.5%);
-  --muted-foreground: hsl(215, 20.2%, 65.1%);
-  --popover: hsl(222.2, 84%, 4.9%);
-  --popover-foreground: hsl(210, 40%, 98%);
-  --card: hsl(222.2, 84%, 4.9%);
-  --card-foreground: hsl(210, 40%, 98%);
-  --border: hsl(217.2, 32.6%, 17.5%);
-  --input: hsl(217.2, 32.6%, 17.5%);
-  --primary: hsl(217.2, 91.2%, 59.8%);
-  --primary-foreground: hsl(222.2, 84%, 4.9%);
-  --secondary: hsl(217.2, 32.6%, 17.5%);
-  --secondary-foreground: hsl(210, 40%, 98%);
-  --accent: hsl(217.2, 32.6%, 17.5%);
-  --accent-foreground: hsl(210, 40%, 98%);
-  --destructive: hsl(0, 62.8%, 30.6%);
-  --destructive-foreground: hsl(210, 40%, 98%);
-  --success: hsl(142.1, 70.6%, 45.3%);
-  --success-foreground: hsl(144.9, 80.4%, 10%);
-  --ring: hsl(217.2, 91.2%, 59.8%);
-  --radius: 0.5rem;
+  --background: hsl(0, 0%, 0%);
+  --foreground: hsl(0, 0%, 100%);
+  --muted: hsl(300, 100%, 10%);
+  --muted-foreground: hsl(0, 0%, 75%);
+  --popover: hsl(0, 0%, 0%);
+  --popover-foreground: hsl(0, 0%, 100%);
+  --card: hsl(0, 0%, 5%);
+  --card-foreground: hsl(0, 0%, 100%);
+  --border: hsl(0, 0%, 100%);
+  --input: hsl(0, 0%, 5%);
+  --primary: hsl(60, 100%, 50%);
+  --primary-foreground: hsl(0, 0%, 0%);
+  --secondary: hsl(300, 100%, 50%);
+  --secondary-foreground: hsl(0, 0%, 100%);
+  --accent: hsl(180, 100%, 50%);
+  --accent-foreground: hsl(0, 0%, 0%);
+  --destructive: hsl(0, 100%, 60%);
+  --destructive-foreground: hsl(0, 0%, 0%);
+  --success: hsl(120, 100%, 50%);
+  --success-foreground: hsl(0, 0%, 0%);
+  --ring: hsl(60, 100%, 50%);
+  --radius: 0rem;
 }
 
 @layer base {
@@ -120,35 +120,103 @@
     background-color: var(--success);
   }
   
-  .animate-gradient {
-    background-size: 200% 200%;
-    animation: gradientShift 3s ease infinite;
+  /* Neubrutalism styles */
+  .brutal-border {
+    border: 4px solid hsl(var(--border));
+    box-shadow: 6px 6px 0px hsl(var(--border));
   }
   
-  .gradient-border {
-    background: linear-gradient(90deg, hsl(var(--primary)), hsl(var(--primary) / 0.8), hsl(var(--primary)));
-    background-size: 200% 200%;
-    animation: gradientShift 3s ease infinite;
+  .brutal-border:hover {
+    transform: translate(-3px, -3px);
+    box-shadow: 9px 9px 0px hsl(var(--border));
+    transition: all 0.1s ease;
   }
   
-  .glass-effect {
-    backdrop-filter: blur(12px);
-    background: hsl(var(--background) / 0.8);
-    border: 1px solid hsl(var(--border) / 0.3);
+  .brutal-button {
+    border: 3px solid hsl(var(--border));
+    box-shadow: 4px 4px 0px hsl(var(--border));
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
   }
   
-  .dark .glass-effect {
-    background: hsl(var(--background) / 0.9);
-    border: 1px solid hsl(var(--border) / 0.4);
+  .brutal-button:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 6px 6px 0px hsl(var(--border));
+    transition: all 0.1s ease;
   }
   
-  .hover-glow:hover {
-    box-shadow: 0 0 20px hsl(var(--primary) / 0.3);
-    transition: all 0.3s ease;
+  .brutal-button:active {
+    transform: translate(2px, 2px);
+    box-shadow: 2px 2px 0px hsl(var(--border));
   }
   
-  .dark .hover-glow:hover {
-    box-shadow: 0 0 30px hsl(var(--primary) / 0.5);
+  .brutal-card {
+    border: 4px solid hsl(var(--border));
+    box-shadow: 8px 8px 0px hsl(var(--border));
+  }
+  
+  .brutal-input {
+    border: 3px solid hsl(var(--border));
+    box-shadow: inset 2px 2px 0px hsl(var(--border) / 0.1);
+    font-weight: 700;
+  }
+  
+  .brutal-input:focus {
+    box-shadow: inset 2px 2px 0px hsl(var(--border) / 0.2), 0 0 0 3px hsl(var(--primary));
+    outline: none;
+  }
+  
+  .brutal-header {
+    background: linear-gradient(45deg, hsl(var(--primary)), hsl(var(--accent)));
+    border-bottom: 6px solid hsl(var(--border));
+    box-shadow: 0 6px 0px hsl(var(--border));
+  }
+  
+  .brutal-badge {
+    border: 2px solid hsl(var(--border));
+    box-shadow: 2px 2px 0px hsl(var(--border));
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  
+  .brutal-select {
+    border: 3px solid hsl(var(--border));
+    box-shadow: 3px 3px 0px hsl(var(--border));
+    font-weight: 700;
+  }
+  
+  .brutal-table {
+    border: 4px solid hsl(var(--border));
+    box-shadow: 6px 6px 0px hsl(var(--border));
+  }
+  
+  .brutal-table th {
+    border-bottom: 3px solid hsl(var(--border));
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  
+  .brutal-table td {
+    border-bottom: 2px solid hsl(var(--border));
+  }
+  
+  .brutal-event-card {
+    border: 3px solid hsl(var(--border));
+    box-shadow: 5px 5px 0px hsl(var(--border));
+    transform: rotate(-1deg);
+  }
+  
+  .brutal-event-card:nth-child(even) {
+    transform: rotate(1deg);
+  }
+  
+  .brutal-event-card:hover {
+    transform: rotate(0deg) translate(-2px, -2px);
+    box-shadow: 7px 7px 0px hsl(var(--border));
+    transition: all 0.2s ease;
   }
 }
 

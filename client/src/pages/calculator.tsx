@@ -238,25 +238,24 @@ export default function Calculator() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/50 dark:from-background dark:via-background dark:to-muted/20">
+    <div className="min-h-screen bg-background">
       {/* Header */}
-      <header className="relative bg-gradient-to-r from-primary via-primary/90 to-primary/80 dark:from-primary/90 dark:via-primary/80 dark:to-primary/70 text-primary-foreground shadow-2xl">
-        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent"></div>
-        <div className="container mx-auto px-4 py-8 relative">
+      <header className="brutal-header text-primary-foreground">
+        <div className="container mx-auto px-4 py-8">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
-              <div className="p-2 bg-white/10 rounded-xl backdrop-blur-sm">
-                <CalculatorIcon className="h-8 w-8" />
+              <div className="p-3 bg-accent border-4 border-border brutal-border">
+                <CalculatorIcon className="h-8 w-8 text-accent-foreground" />
               </div>
               <div>
-                <h1 className="text-3xl font-bold tracking-tight">Athletics Calculator</h1>
-                <p className="text-primary-foreground/80 text-sm mt-1">Multi-event performance tracking</p>
+                <h1 className="text-4xl font-black tracking-tight uppercase">ATHLETICS CALC</h1>
+                <p className="text-primary-foreground/90 text-sm mt-1 font-bold uppercase tracking-wide">MULTI-EVENT PERFORMANCE</p>
               </div>
             </div>
             <div className="flex items-center space-x-3">
-              <Button variant="ghost" size="sm" className="bg-white/10 hover:bg-white/20 text-primary-foreground border-white/20">
+              <Button className="brutal-button bg-secondary text-secondary-foreground hover:bg-secondary/90">
                 <History className="h-4 w-4 mr-2" />
-                <span className="hidden sm:inline">History</span>
+                <span className="hidden sm:inline">HISTORY</span>
               </Button>
               <ThemeToggle />
             </div>
@@ -266,11 +265,11 @@ export default function Calculator() {
 
       <div className="container mx-auto px-4 py-8 max-w-7xl">
         {/* Event Type Selection */}
-        <Card className="mb-8 border-0 shadow-xl bg-card/80 backdrop-blur-sm">
+        <Card className="mb-8 brutal-card bg-card">
           <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Target className="h-5 w-5 text-primary" />
-              Select Event Type
+            <CardTitle className="flex items-center gap-2 text-2xl font-black uppercase tracking-wide">
+              <Target className="h-6 w-6 text-primary" />
+              SELECT EVENT TYPE
             </CardTitle>
           </CardHeader>
           <CardContent className="p-6">
@@ -278,25 +277,24 @@ export default function Calculator() {
               {(Object.keys(eventConfigs) as EventType[]).map((eventType) => (
                 <Button
                   key={eventType}
-                  variant={selectedEventType === eventType ? "default" : "outline"}
-                  className={`h-auto p-6 transition-all duration-300 ${
+                  className={`h-auto p-6 brutal-button ${
                     selectedEventType === eventType
-                      ? "bg-gradient-to-r from-primary to-primary/90 text-primary-foreground shadow-lg scale-105 border-primary"
-                      : "bg-gradient-to-r from-card to-muted/50 hover:from-primary/10 hover:to-primary/5 hover:scale-105 hover:shadow-lg border-border"
+                      ? "bg-primary text-primary-foreground"
+                      : "bg-card text-card-foreground hover:bg-muted"
                   }`}
                   onClick={() => selectEventType(eventType)}
                 >
                   <div className="flex items-center space-x-4">
-                    <div className={`p-3 rounded-xl ${
+                    <div className={`p-3 border-2 border-border ${
                       selectedEventType === eventType 
-                        ? "bg-white/20" 
-                        : "bg-primary/10 text-primary"
+                        ? "bg-primary-foreground text-primary" 
+                        : "bg-accent text-accent-foreground"
                     }`}>
                       {getEventTypeIcon(eventType)}
                     </div>
                     <div className="text-left">
-                      <h3 className="font-bold text-lg">{eventConfigs[eventType].name}</h3>
-                      <p className="text-sm opacity-70">{eventConfigs[eventType].events.length} Events</p>
+                      <h3 className="font-black text-lg uppercase">{eventConfigs[eventType].name}</h3>
+                      <p className="text-sm font-bold">{eventConfigs[eventType].events.length} EVENTS</p>
                     </div>
                   </div>
                 </Button>
@@ -307,21 +305,21 @@ export default function Calculator() {
 
         {/* Event Calculator */}
         {selectedEventType && (
-          <Card className="mb-8 border-0 shadow-xl bg-card/80 backdrop-blur-sm">
+          <Card className="mb-8 brutal-card bg-card">
             <CardHeader>
               <div className="flex items-center justify-between">
-                <CardTitle className="flex items-center gap-2">
-                  <Zap className="h-5 w-5 text-primary" />
-                  {eventConfigs[selectedEventType].name} Calculator
-                  <Badge variant="outline" className="ml-2">
-                    {eventConfigs[selectedEventType].events.length} Events
+                <CardTitle className="flex items-center gap-2 text-2xl font-black uppercase tracking-wide">
+                  <Zap className="h-6 w-6 text-primary" />
+                  {eventConfigs[selectedEventType].name} CALCULATOR
+                  <Badge className="ml-2 brutal-badge bg-secondary text-secondary-foreground">
+                    {eventConfigs[selectedEventType].events.length} EVENTS
                   </Badge>
                 </CardTitle>
-                <div className="bg-gradient-to-r from-primary/10 to-primary/5 rounded-xl px-6 py-3 border border-primary/20">
+                <div className="bg-accent brutal-border px-6 py-3">
                   <div className="flex items-center gap-2">
-                    <Star className="h-5 w-5 text-primary" />
-                    <span className="text-sm font-medium text-foreground">Total Score:</span>
-                    <span className="text-2xl font-bold text-primary">{totalScore.toLocaleString()}</span>
+                    <Star className="h-5 w-5 text-accent-foreground" />
+                    <span className="text-sm font-black text-accent-foreground uppercase tracking-wide">TOTAL:</span>
+                    <span className="text-2xl font-black text-accent-foreground">{totalScore.toLocaleString()}</span>
                   </div>
                 </div>
               </div>
@@ -329,13 +327,13 @@ export default function Calculator() {
             <CardContent className="p-6">
               <div className="space-y-6">
                 {eventResults.map((event, index) => (
-                  <div key={index} className="bg-gradient-to-r from-muted/50 to-muted/30 rounded-xl p-6 border border-border/50">
+                  <div key={index} className="brutal-event-card bg-muted p-6">
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-center">
                       <div className="flex items-center space-x-4">
-                        <div className={`p-3 rounded-xl ${
+                        <div className={`p-3 border-3 border-border ${
                           event.type === "time" 
-                            ? "bg-blue-100 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400"
-                            : "bg-green-100 text-green-600 dark:bg-green-900/30 dark:text-green-400"
+                            ? "bg-secondary text-secondary-foreground"
+                            : "bg-accent text-accent-foreground"
                         }`}>
                           {event.type === "time" ? (
                             <Clock className="h-5 w-5" />
@@ -344,15 +342,15 @@ export default function Calculator() {
                           )}
                         </div>
                         <div>
-                          <h4 className="font-bold text-foreground">{event.name}</h4>
-                          <p className="text-sm text-muted-foreground">
-                            {event.type === "time" ? "Time" : "Distance/Height"} ({event.unit})
+                          <h4 className="font-black text-foreground uppercase">{event.name}</h4>
+                          <p className="text-sm text-muted-foreground font-bold uppercase tracking-wide">
+                            {event.type === "time" ? "TIME" : "DISTANCE/HEIGHT"} ({event.unit})
                           </p>
                         </div>
                       </div>
                       <div className="space-y-2">
-                        <Label htmlFor={`result-${index}`} className="text-sm font-medium text-foreground">
-                          Result
+                        <Label htmlFor={`result-${index}`} className="text-sm font-black text-foreground uppercase tracking-wide">
+                          RESULT
                         </Label>
                         <Input
                           id={`result-${index}`}
@@ -360,12 +358,12 @@ export default function Calculator() {
                           placeholder={eventConfigs[selectedEventType].events[index].placeholder}
                           value={event.result}
                           onChange={(e) => updateResult(index, "result", e.target.value)}
-                          className="w-full bg-background/50 backdrop-blur-sm border-border/60 focus:border-primary/50 focus:ring-primary/25"
+                          className="w-full brutal-input bg-input text-foreground"
                         />
                       </div>
                       <div className="space-y-2">
-                        <Label htmlFor={`points-${index}`} className="text-sm font-medium text-foreground">
-                          Points
+                        <Label htmlFor={`points-${index}`} className="text-sm font-black text-foreground uppercase tracking-wide">
+                          POINTS
                         </Label>
                         <Input
                           id={`points-${index}`}
@@ -373,7 +371,7 @@ export default function Calculator() {
                           placeholder="0"
                           value={event.points || ""}
                           onChange={(e) => updateResult(index, "points", e.target.value)}
-                          className="w-full bg-background/50 backdrop-blur-sm border-border/60 focus:border-primary/50 focus:ring-primary/25"
+                          className="w-full brutal-input bg-input text-foreground"
                         />
                       </div>
                     </div>
@@ -381,24 +379,24 @@ export default function Calculator() {
                 ))}
               </div>
 
-              <Separator className="my-8" />
+              <div className="my-8 h-1 bg-border"></div>
 
               <div className="flex flex-col sm:flex-row gap-4">
-                <Button onClick={calculateTotal} className="flex-1 bg-gradient-to-r from-primary to-primary/90 hover:from-primary/90 hover:to-primary/80 shadow-lg">
+                <Button onClick={calculateTotal} className="flex-1 brutal-button bg-primary text-primary-foreground">
                   <CalculatorIcon className="h-4 w-4 mr-2" />
-                  Calculate Total
+                  CALCULATE TOTAL
                 </Button>
                 <Button 
                   onClick={savePerformance} 
                   disabled={savePerformanceMutation.isPending}
-                  className="flex-1 bg-gradient-to-r from-success to-success/90 hover:from-success/90 hover:to-success/80 text-success-foreground shadow-lg"
+                  className="flex-1 brutal-button bg-success text-success-foreground"
                 >
                   <Save className="h-4 w-4 mr-2" />
-                  Save Performance
+                  SAVE PERFORMANCE
                 </Button>
-                <Button onClick={clearAll} variant="outline" className="border-border/60 hover:bg-muted/50">
+                <Button onClick={clearAll} className="brutal-button bg-destructive text-destructive-foreground">
                   <Eraser className="h-4 w-4 mr-2" />
-                  Clear All
+                  CLEAR ALL
                 </Button>
               </div>
             </CardContent>
@@ -406,23 +404,23 @@ export default function Calculator() {
         )}
 
         {/* Performance History */}
-        <Card className="border-0 shadow-xl bg-card/80 backdrop-blur-sm">
+        <Card className="brutal-card bg-card">
           <CardHeader>
             <div className="flex items-center justify-between">
-              <CardTitle className="flex items-center gap-2">
-                <History className="h-5 w-5 text-primary" />
-                Performance History
+              <CardTitle className="flex items-center gap-2 text-2xl font-black uppercase tracking-wide">
+                <History className="h-6 w-6 text-primary" />
+                PERFORMANCE HISTORY
               </CardTitle>
               <div className="flex items-center space-x-3">
                 <Select value={historyFilter} onValueChange={setHistoryFilter}>
-                  <SelectTrigger className="w-40 bg-background/50 backdrop-blur-sm border-border/60">
+                  <SelectTrigger className="w-40 brutal-select bg-input text-foreground">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="all">All Events</SelectItem>
-                    <SelectItem value="pentathlon">Pentathlon</SelectItem>
-                    <SelectItem value="heptathlon">Heptathlon</SelectItem>
-                    <SelectItem value="decathlon">Decathlon</SelectItem>
+                    <SelectItem value="all">ALL EVENTS</SelectItem>
+                    <SelectItem value="pentathlon">PENTATHLON</SelectItem>
+                    <SelectItem value="heptathlon">HEPTATHLON</SelectItem>
+                    <SelectItem value="decathlon">DECATHLON</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -431,53 +429,52 @@ export default function Calculator() {
           <CardContent className="p-6">
             {isLoading ? (
               <div className="text-center py-12">
-                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto mb-4"></div>
-                <p className="text-muted-foreground">Loading performances...</p>
+                <div className="w-12 h-12 border-4 border-border border-t-primary mx-auto mb-4 animate-spin"></div>
+                <p className="text-muted-foreground font-bold uppercase tracking-wide">LOADING PERFORMANCES...</p>
               </div>
             ) : performances.length === 0 ? (
               <div className="text-center py-12">
-                <div className="bg-muted/50 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
+                <div className="bg-muted border-4 border-border w-16 h-16 flex items-center justify-center mx-auto mb-4 transform rotate-12">
                   <Trophy className="h-8 w-8 text-muted-foreground" />
                 </div>
-                <p className="text-muted-foreground">No performances recorded yet.</p>
-                <p className="text-sm text-muted-foreground mt-1">Start by selecting an event type and entering results.</p>
+                <p className="text-muted-foreground font-bold uppercase tracking-wide">NO PERFORMANCES RECORDED YET</p>
+                <p className="text-sm text-muted-foreground mt-1 font-semibold">START BY SELECTING AN EVENT TYPE AND ENTERING RESULTS</p>
               </div>
             ) : (
               <div className="overflow-x-auto">
-                <Table>
+                <Table className="brutal-table">
                   <TableHeader>
-                    <TableRow className="border-border/50">
-                      <TableHead className="text-foreground font-semibold">Date</TableHead>
-                      <TableHead className="text-foreground font-semibold">Event Type</TableHead>
-                      <TableHead className="text-foreground font-semibold">Total Score</TableHead>
-                      <TableHead className="text-foreground font-semibold">Actions</TableHead>
+                    <TableRow>
+                      <TableHead className="text-foreground font-black uppercase tracking-wide">DATE</TableHead>
+                      <TableHead className="text-foreground font-black uppercase tracking-wide">EVENT TYPE</TableHead>
+                      <TableHead className="text-foreground font-black uppercase tracking-wide">TOTAL SCORE</TableHead>
+                      <TableHead className="text-foreground font-black uppercase tracking-wide">ACTIONS</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
                     {performances.map((performance) => (
-                      <TableRow key={performance.id} className="border-border/50 hover:bg-muted/30 transition-colors">
-                        <TableCell className="text-sm text-foreground">
+                      <TableRow key={performance.id} className="hover:bg-muted/50 transition-colors">
+                        <TableCell className="text-sm text-foreground font-bold">
                           {new Date(performance.date).toLocaleDateString()}
                         </TableCell>
                         <TableCell>
-                          <Badge className={`${getEventTypeBadgeColor(performance.eventType)} border-0`}>
+                          <Badge className={`${getEventTypeBadgeColor(performance.eventType)} brutal-badge`}>
                             {performance.eventType}
                           </Badge>
                         </TableCell>
-                        <TableCell className="font-bold text-primary text-lg">
+                        <TableCell className="font-black text-primary text-lg">
                           {performance.totalScore.toLocaleString()}
                         </TableCell>
                         <TableCell>
                           <div className="flex space-x-2">
-                            <Button variant="ghost" size="sm" className="hover:bg-primary/10 hover:text-primary">
+                            <Button size="sm" className="brutal-button bg-accent text-accent-foreground p-2">
                               <Eye className="h-4 w-4" />
                             </Button>
                             <Button 
-                              variant="ghost" 
                               size="sm"
                               onClick={() => deletePerformance(performance.id)}
                               disabled={deletePerformanceMutation.isPending}
-                              className="hover:bg-destructive/10 hover:text-destructive"
+                              className="brutal-button bg-destructive text-destructive-foreground p-2"
                             >
                               <Trash2 className="h-4 w-4" />
                             </Button>
