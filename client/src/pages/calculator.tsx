@@ -98,12 +98,12 @@ export default function Calculator() {
   };
 
   const getEventUnit = (eventName: string) => {
-    if (eventName.includes("m") || eventName.includes("Hurdles")) {
-      return "seconds";
-    }
     // Always show meters for Long Jump and High Jump
     if (eventName === "Long Jump" || eventName === "High Jump") {
       return "meters";
+    }
+    if (eventName.includes("m") || eventName.includes("Hurdles")) {
+      return "seconds";
     }
     return isMetric ? "meters" : "feet";
   };
