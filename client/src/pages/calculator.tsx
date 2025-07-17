@@ -718,13 +718,11 @@ export default function Calculator() {
                 <CardContent className="p-4">
                   <div className="space-y-4">
                     {performances.map((performance, index) => {
-                      console.log('Performance data:', performance); // Debug log
                       const radarData = performance.eventResults?.map(event => ({
                         event: event.name,
                         points: event.points,
                         fullMark: 1200 // Maximum possible points for radar visualization
                       })) || [];
-                      console.log('Radar data:', radarData); // Debug log
 
                       return (
                         <div key={performance.id} className="glass-card p-4">
