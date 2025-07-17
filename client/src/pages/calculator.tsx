@@ -12,6 +12,7 @@ import { useToast } from "@/hooks/use-toast";
 import { queryClient } from "@/lib/queryClient";
 import { apiRequest } from "@/lib/queryClient";
 import { type Performance, type EventResult } from "@shared/schema";
+import { calculatePoints, estimateResult } from "@/lib/scoring";
 
 type EventType = "pentathlon" | "heptathlon" | "decathlon";
 
@@ -133,43 +134,32 @@ export default function Calculator() {
 
   const updateResult = (index: number, field: "result" | "points", value: string) => {
     const newResults = [...eventResults];
+    
     if (field === "result") {
       newResults[index].result = value;
       // Auto-calculate points when result is entered
-      calculatePointsForEvent(index, value);
+      if (value.trim() && selectedEventType) {
+        const event = eventResults[index];
+        const calculatedPoints = calculatePoints(selectedEventType, event.name, value, event.type);
+        newResults[index].points = calculatedPoints;
+      } else {
+        newResults[index].points = 0;
+      }
     } else {
-      newResults[index].points = parseInt(value) || 0;
+      const points = parseInt(value) || 0;
+      newResults[index].points = points;
+      // Auto-calculate result when points are entered
+      if (points > 0 && selectedEventType) {
+        const event = eventResults[index];
+        const estimatedResult = estimateResult(selectedEventType, event.name, points, event.type);
+        newResults[index].result = estimatedResult;
+      } else {
+        newResults[index].result = "";
+      }
     }
+    
     setEventResults(newResults);
     calculateTotal();
-  };
-
-  const calculatePointsForEvent = async (index: number, result: string) => {
-    if (!selectedEventType || !result.trim()) return;
-    
-    const event = eventResults[index];
-    try {
-      const response = await fetch(`/api/calculate-points`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          eventType: selectedEventType,
-          eventName: event.name,
-          result: result,
-          type: event.type
-        })
-      });
-      
-      if (response.ok) {
-        const { points } = await response.json();
-        const newResults = [...eventResults];
-        newResults[index].points = points;
-        setEventResults(newResults);
-        calculateTotal();
-      }
-    } catch (error) {
-      console.error("Failed to calculate points:", error);
-    }
   };
 
   const calculateTotal = () => {
