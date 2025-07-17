@@ -83,9 +83,10 @@ export default function Calculator() {
     mutationFn: async (performance: { uuid: string; eventType: string; eventResults: EventResult[]; totalScore: number; label?: string }) => {
       return await apiRequest("POST", "/api/performances", performance);
     },
-    onSuccess: () => {
+    onSuccess: (savedPerformance) => {
       queryClient.invalidateQueries({ queryKey: ["/api/performances"] });
-      setEditingPerformanceId(null);
+      // Set the editing ID to the newly created performance UUID so subsequent saves are updates
+      setEditingPerformanceId(savedPerformance.uuid);
       toast({
         title: "Performance Saved",
         description: "Your performance has been saved successfully",
@@ -104,9 +105,10 @@ export default function Calculator() {
     mutationFn: async (performance: { uuid: string; eventType: string; eventResults: EventResult[]; totalScore: number; label?: string }) => {
       return await apiRequest("PUT", `/api/performances/${performance.uuid}`, performance);
     },
-    onSuccess: () => {
+    onSuccess: (updatedPerformance) => {
       queryClient.invalidateQueries({ queryKey: ["/api/performances"] });
-      setEditingPerformanceId(null);
+      // Keep the editing ID so user can continue editing the same performance
+      setEditingPerformanceId(updatedPerformance.uuid);
       toast({
         title: "Performance Updated",
         description: "Your performance has been updated successfully",
