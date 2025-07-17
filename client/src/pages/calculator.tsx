@@ -505,7 +505,11 @@ export default function Calculator() {
                       </div>
                       <div className="space-y-1">
                         <Label htmlFor={`result-${index}`} className="text-xs font-semibold text-foreground tracking-wide">
-                          Result
+                          Result {!isMetric && (event.name === "Long Jump" || event.name === "High Jump" || event.name === "Shot Put" || event.name === "Discus" || event.name === "Javelin" || event.name === "Pole Vault") && event.result && (
+                            <span className="text-muted-foreground/60 font-normal">
+                              ({(parseFloat(event.result) * 0.3048).toFixed(2)}m)
+                            </span>
+                          )}
                         </Label>
                         <Input
                           id={`result-${index}`}
