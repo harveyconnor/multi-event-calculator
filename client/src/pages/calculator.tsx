@@ -98,10 +98,6 @@ export default function Calculator() {
   };
 
   const getEventUnit = (eventName: string) => {
-    // Always show meters for Long Jump and High Jump
-    if (eventName === "Long Jump" || eventName === "High Jump") {
-      return "meters";
-    }
     // Special case for 800m and 1500m to show minutes:seconds format
     if (eventName === "800m" || eventName === "1500m") {
       return "minutes:seconds";
@@ -111,6 +107,7 @@ export default function Calculator() {
         eventName.includes("800m") || eventName.includes("Hurdles") || eventName.includes("60m")) {
       return "seconds";
     }
+    // For all field events including Long Jump and High Jump, respect metric/imperial toggle
     return isMetric ? "meters" : "feet";
   };
 
