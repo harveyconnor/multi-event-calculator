@@ -271,7 +271,9 @@ export default function Calculator() {
         <Card className="mb-8 glass-card">
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-2xl font-semibold uppercase tracking-wide">
-              <Target className="h-6 w-6 text-primary" />
+              <div className="glass-icon-container w-8 h-8 flex items-center justify-center bg-gradient-to-br from-blue-500/20 to-purple-500/20 border-blue-400/30">
+                <Target className="h-4 w-4 text-white" />
+              </div>
               SELECT EVENT TYPE
             </CardTitle>
           </CardHeader>
@@ -312,7 +314,9 @@ export default function Calculator() {
             <CardHeader>
               <div className="flex items-center justify-between">
                 <CardTitle className="flex items-center gap-2 text-2xl font-semibold uppercase tracking-wide">
-                  <Zap className="h-6 w-6 text-primary" />
+                  <div className="glass-icon-container w-8 h-8 flex items-center justify-center bg-gradient-to-br from-yellow-500/20 to-orange-500/20 border-yellow-400/30">
+                    <Zap className="h-4 w-4 text-white" />
+                  </div>
                   {eventConfigs[selectedEventType].name} CALCULATOR
                   <Badge className="ml-2 glass-badge bg-secondary text-secondary-foreground">
                     {eventConfigs[selectedEventType].events.length} EVENTS
@@ -412,8 +416,10 @@ export default function Calculator() {
         <Card className="glass-card">
           <CardHeader>
             <div className="flex items-center justify-between">
-              <CardTitle className="flex items-center gap-2 text-2xl font-black uppercase tracking-wide">
-                <History className="h-6 w-6 text-primary" />
+              <CardTitle className="flex items-center gap-2 text-2xl font-semibold uppercase tracking-wide">
+                <div className="glass-icon-container w-8 h-8 flex items-center justify-center bg-gradient-to-br from-green-500/20 to-emerald-500/20 border-green-400/30">
+                  <History className="h-4 w-4 text-white" />
+                </div>
                 PERFORMANCE HISTORY
               </CardTitle>
               <div className="flex items-center space-x-3">
@@ -421,11 +427,11 @@ export default function Calculator() {
                   <SelectTrigger className="w-40 glass-select text-foreground">
                     <SelectValue />
                   </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">ALL EVENTS</SelectItem>
-                    <SelectItem value="pentathlon">PENTATHLON</SelectItem>
-                    <SelectItem value="heptathlon">HEPTATHLON</SelectItem>
-                    <SelectItem value="decathlon">DECATHLON</SelectItem>
+                  <SelectContent className="glass-dropdown">
+                    <SelectItem value="all" className="glass-dropdown-item">ALL EVENTS</SelectItem>
+                    <SelectItem value="pentathlon" className="glass-dropdown-item">PENTATHLON</SelectItem>
+                    <SelectItem value="heptathlon" className="glass-dropdown-item">HEPTATHLON</SelectItem>
+                    <SelectItem value="decathlon" className="glass-dropdown-item">DECATHLON</SelectItem>
                   </SelectContent>
                 </Select>
               </div>

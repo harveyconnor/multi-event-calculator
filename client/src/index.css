@@ -301,6 +301,50 @@
   .dark .glass-icon-container:hover {
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.1);
   }
+
+  /* Glass dropdown styling */
+  .glass-dropdown {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 8px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  }
+
+  .dark .glass-dropdown {
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+  }
+
+  .glass-dropdown-item {
+    transition: all 0.2s ease;
+  }
+
+  .glass-dropdown-item:hover {
+    background: rgba(255, 255, 255, 0.1);
+  }
+
+  .dark .glass-dropdown-item:hover {
+    background: rgba(255, 255, 255, 0.05);
+  }
+
+  /* Glass toast styling */
+  .glass-toast {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 12px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  }
+
+  .dark .glass-toast {
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  }
   
   .glass-select {
     background: rgba(255, 255, 255, 0.1);
@@ -386,9 +430,9 @@
   /* Gradient background */
   .glass-background {
     background: linear-gradient(135deg, 
-      #667eea 0%, 
-      #764ba2 50%,
-      #f093fb 100%
+      #1a1a2e 0%, 
+      #16213e 50%,
+      #0f172a 100%
     );
     min-height: 100vh;
     position: relative;
@@ -409,9 +453,9 @@
   
   .dark .glass-background {
     background: linear-gradient(135deg, 
-      #1a202c 0%, 
-      #2d3748 50%,
-      #4a5568 100%
+      #0f0f23 0%, 
+      #1a1a2e 50%,
+      #16213e 100%
     );
   }
   
