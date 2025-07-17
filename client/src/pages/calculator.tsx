@@ -712,17 +712,19 @@ export default function Calculator() {
                     <div className="glass-icon-container w-6 h-6 flex items-center justify-center bg-gradient-to-br from-purple-500/20 to-pink-500/20 border-purple-400/30">
                       <BarChart3 className="h-3 w-3 text-white" />
                     </div>
-                    Points Distribution
+                    Points Distribution ({performances.length} performances)
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="p-4">
                   <div className="space-y-4">
                     {performances.map((performance, index) => {
-                      const radarData = performance.eventResults.map(event => ({
+                      console.log('Performance data:', performance); // Debug log
+                      const radarData = performance.eventResults?.map(event => ({
                         event: event.name,
                         points: event.points,
                         fullMark: 1200 // Maximum possible points for radar visualization
-                      }));
+                      })) || [];
+                      console.log('Radar data:', radarData); // Debug log
 
                       return (
                         <div key={performance.id} className="glass-card p-4">
@@ -740,34 +742,38 @@ export default function Calculator() {
                             </div>
                           </div>
                           
-                          <div className="h-80 w-full">
+                          <div className="h-80 w-full bg-black/20 rounded-lg border border-white/10 p-4">
                             <ResponsiveContainer width="100%" height="100%">
-                              <RadarChart data={radarData}>
-                                <PolarGrid gridType="polygon" className="stroke-white/10" />
+                              <RadarChart data={radarData} margin={{ top: 20, right: 30, bottom: 20, left: 30 }}>
+                                <PolarGrid 
+                                  gridType="polygon" 
+                                  stroke="rgba(255, 255, 255, 0.2)"
+                                  strokeWidth={1}
+                                />
                                 <PolarAngleAxis 
                                   dataKey="event" 
-                                  className="text-xs fill-white/80"
-                                  fontSize={11}
+                                  tick={{ fill: 'white', fontSize: 12 }}
+                                  className="text-xs"
                                 />
                                 <PolarRadiusAxis 
                                   angle={90} 
                                   domain={[0, 1200]}
-                                  className="text-xs fill-white/60"
-                                  fontSize={10}
+                                  tick={{ fill: 'rgba(255, 255, 255, 0.6)', fontSize: 10 }}
+                                  tickCount={6}
                                 />
                                 <Radar
                                   name="Points"
                                   dataKey="points"
                                   stroke="#8B5CF6"
                                   fill="#8B5CF6"
-                                  fillOpacity={0.3}
-                                  strokeWidth={2}
-                                  dot={{ r: 4, fill: "#8B5CF6" }}
+                                  fillOpacity={0.4}
+                                  strokeWidth={3}
+                                  dot={{ r: 5, fill: "#8B5CF6", strokeWidth: 2, stroke: "#fff" }}
                                 />
                                 <Tooltip 
                                   contentStyle={{
-                                    backgroundColor: 'rgba(0, 0, 0, 0.8)',
-                                    border: '1px solid rgba(255, 255, 255, 0.2)',
+                                    backgroundColor: 'rgba(0, 0, 0, 0.9)',
+                                    border: '1px solid rgba(139, 92, 246, 0.5)',
                                     borderRadius: '8px',
                                     color: 'white',
                                     fontSize: '12px'
