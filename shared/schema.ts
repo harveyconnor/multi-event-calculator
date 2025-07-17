@@ -14,6 +14,7 @@ export const performances = pgTable("performances", {
   eventResults: jsonb("event_results").notNull(),
   totalScore: integer("total_score").notNull(),
   date: timestamp("date").notNull().defaultNow(),
+  label: text("label"),
 });
 
 export const insertUserSchema = createInsertSchema(users).pick({
@@ -24,6 +25,8 @@ export const insertUserSchema = createInsertSchema(users).pick({
 export const insertPerformanceSchema = createInsertSchema(performances).omit({
   id: true,
   date: true,
+}).extend({
+  label: z.string().optional(),
 });
 
 export type InsertUser = z.infer<typeof insertUserSchema>;

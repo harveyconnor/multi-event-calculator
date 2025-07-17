@@ -47,7 +47,7 @@ Design theme: Neubrutalism - bold colors, thick borders, sharp geometric shapes,
 
 ### Database Schema
 - **Users Table**: Authentication and user management
-- **Performances Table**: Event results with JSON storage for flexible event data
+- **Performances Table**: Event results with JSON storage for flexible event data, now includes optional labels
 - **Validation**: Zod schemas for runtime type checking and API validation
 
 ### Scoring System
@@ -65,6 +65,7 @@ Design theme: Neubrutalism - bold colors, thick borders, sharp geometric shapes,
 - **Calculator Interface**: Form-based input for each event type
 - **Results Display**: Table view of all results with sorting and filtering
 - **Performance Tracking**: Historical performance data with date tracking
+- **Performance Labels**: Optional labels for performances (e.g., "Personal Best", "Competition")
 - **Responsive Design**: Mobile-optimized interface with adaptive components
 - **Neubrutalism Design**: Bold, high-contrast UI with thick borders, sharp corners, and vibrant colors
 - **Dark Mode Support**: System theme detection with manual toggle between light/dark/system modes

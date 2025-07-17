@@ -64,6 +64,7 @@ export default function Calculator() {
   const [eventResults, setEventResults] = useState<EventResult[]>([]);
   const [totalScore, setTotalScore] = useState(0);
   const [historyFilter, setHistoryFilter] = useState<string>("all");
+  const [performanceLabel, setPerformanceLabel] = useState<string>("");
 
   const { data: performances = [], isLoading } = useQuery({
     queryKey: ["/api/performances", historyFilter],
@@ -76,7 +77,7 @@ export default function Calculator() {
   });
 
   const savePerformanceMutation = useMutation({
-    mutationFn: async (performance: { eventType: string; eventResults: EventResult[]; totalScore: number }) => {
+    mutationFn: async (performance: { eventType: string; eventResults: EventResult[]; totalScore: number; label?: string }) => {
       return await apiRequest("POST", "/api/performances", performance);
     },
     onSuccess: () => {
@@ -127,6 +128,7 @@ export default function Calculator() {
     }));
     setEventResults(newResults);
     setTotalScore(0);
+    setPerformanceLabel("");
     
     toast({
       title: `${config.name} Selected`,
@@ -191,7 +193,8 @@ export default function Calculator() {
     savePerformanceMutation.mutate({
       eventType: selectedEventType,
       eventResults,
-      totalScore
+      totalScore,
+      label: performanceLabel || undefined,
     });
   };
 
@@ -207,6 +210,7 @@ export default function Calculator() {
       }));
       setEventResults(newResults);
       setTotalScore(0);
+      setPerformanceLabel("");
       
       toast({
         title: "Cleared",
@@ -381,6 +385,20 @@ export default function Calculator() {
 
               <div className="my-8 h-1 bg-border"></div>
 
+              <div className="mb-6">
+                <Label htmlFor="performance-label" className="text-sm font-black text-foreground uppercase tracking-wide">
+                  PERFORMANCE LABEL (OPTIONAL)
+                </Label>
+                <Input
+                  id="performance-label"
+                  type="text"
+                  placeholder="e.g., 'Personal Best', 'Competition', 'Training'"
+                  value={performanceLabel}
+                  onChange={(e) => setPerformanceLabel(e.target.value)}
+                  className="mt-2 brutal-input bg-input text-foreground"
+                />
+              </div>
+
               <div className="flex flex-col sm:flex-row gap-4">
                 <Button onClick={calculateTotal} className="flex-1 brutal-button bg-primary text-primary-foreground">
                   <CalculatorIcon className="h-4 w-4 mr-2" />
@@ -446,6 +464,7 @@ export default function Calculator() {
                   <TableHeader>
                     <TableRow>
                       <TableHead className="text-foreground font-black uppercase tracking-wide">DATE</TableHead>
+                      <TableHead className="text-foreground font-black uppercase tracking-wide">LABEL</TableHead>
                       <TableHead className="text-foreground font-black uppercase tracking-wide">EVENT TYPE</TableHead>
                       <TableHead className="text-foreground font-black uppercase tracking-wide">TOTAL SCORE</TableHead>
                       <TableHead className="text-foreground font-black uppercase tracking-wide">ACTIONS</TableHead>
@@ -456,6 +475,15 @@ export default function Calculator() {
                       <TableRow key={performance.id} className="hover:bg-muted/50 transition-colors">
                         <TableCell className="text-sm text-foreground font-bold">
                           {new Date(performance.date).toLocaleDateString()}
+                        </TableCell>
+                        <TableCell className="text-sm text-foreground font-bold">
+                          {performance.label ? (
+                            <Badge className="brutal-badge bg-muted text-muted-foreground">
+                              {performance.label}
+                            </Badge>
+                          ) : (
+                            <span className="text-muted-foreground font-normal">—</span>
+                          )}
                         </TableCell>
                         <TableCell>
                           <Badge className={`${getEventTypeBadgeColor(performance.eventType)} brutal-badge`}>
