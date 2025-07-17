@@ -517,10 +517,7 @@ export default function Calculator() {
                     <div className="glass-icon-container w-6 h-6 flex items-center justify-center bg-gradient-to-br from-yellow-500/20 to-orange-500/20 border-yellow-400/30">
                       <Zap className="h-3 w-3 text-white" />
                     </div>
-                    {eventConfigs[selectedEventType].name} Calculator
-                    <Badge className="ml-2 glass-badge bg-secondary text-secondary-foreground text-xs">
-                      {eventConfigs[selectedEventType].events.length} Events
-                    </Badge>
+                    {eventConfigs[selectedEventType].name}
                   </CardTitle>
                   <p className="text-xs text-muted-foreground mt-2 font-medium">
                     Enter your results to auto-calculate points, or enter points to estimate results. Both fields update each other automatically.
