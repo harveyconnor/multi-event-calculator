@@ -251,8 +251,8 @@ export default function Calculator() {
                 <CalculatorIcon className="h-8 w-8 text-white" />
               </div>
               <div>
-                <h1 className="text-4xl font-black tracking-tight uppercase text-white">ATHLETICS CALCULATOR</h1>
-                <p className="text-white/90 text-sm mt-1 font-bold uppercase tracking-wide">MULTI-EVENT PERFORMANCE TRACKER</p>
+                <h1 className="text-4xl font-semibold tracking-tight uppercase text-white">ATHLETICS CALCULATOR</h1>
+                <p className="text-white/90 text-sm mt-1 font-medium uppercase tracking-wide">MULTI-EVENT PERFORMANCE TRACKER</p>
               </div>
             </div>
             <div className="flex items-center space-x-3">
@@ -270,7 +270,7 @@ export default function Calculator() {
         {/* Event Type Selection */}
         <Card className="mb-8 glass-card">
           <CardHeader>
-            <CardTitle className="flex items-center gap-2 text-2xl font-black uppercase tracking-wide">
+            <CardTitle className="flex items-center gap-2 text-2xl font-semibold uppercase tracking-wide">
               <Target className="h-6 w-6 text-primary" />
               SELECT EVENT TYPE
             </CardTitle>
@@ -288,16 +288,16 @@ export default function Calculator() {
                   onClick={() => selectEventType(eventType)}
                 >
                   <div className="flex items-center space-x-4">
-                    <div className={`p-3 border-2 border-border ${
+                    <div className={`p-3 glass-icon-container ${
                       selectedEventType === eventType 
-                        ? "bg-primary-foreground text-primary" 
-                        : "bg-accent text-accent-foreground"
+                        ? "bg-blue-500/30 text-white border-blue-400/50" 
+                        : "text-white"
                     }`}>
                       {getEventTypeIcon(eventType)}
                     </div>
                     <div className="text-left">
-                      <h3 className="font-black text-lg uppercase">{eventConfigs[eventType].name}</h3>
-                      <p className="text-sm font-bold">{eventConfigs[eventType].events.length} EVENTS</p>
+                      <h3 className="font-semibold text-lg uppercase">{eventConfigs[eventType].name}</h3>
+                      <p className="text-sm font-medium">{eventConfigs[eventType].events.length} EVENTS</p>
                     </div>
                   </div>
                 </Button>
@@ -311,18 +311,18 @@ export default function Calculator() {
           <Card className="mb-8 glass-card">
             <CardHeader>
               <div className="flex items-center justify-between">
-                <CardTitle className="flex items-center gap-2 text-2xl font-black uppercase tracking-wide">
+                <CardTitle className="flex items-center gap-2 text-2xl font-semibold uppercase tracking-wide">
                   <Zap className="h-6 w-6 text-primary" />
                   {eventConfigs[selectedEventType].name} CALCULATOR
-                  <Badge className="ml-2 brutal-badge bg-secondary text-secondary-foreground">
+                  <Badge className="ml-2 glass-badge bg-secondary text-secondary-foreground">
                     {eventConfigs[selectedEventType].events.length} EVENTS
                   </Badge>
                 </CardTitle>
-                <div className="bg-accent brutal-border px-6 py-3">
+                <div className="glass-card bg-gradient-to-r from-blue-500/20 to-purple-500/20 border-blue-400/30 px-6 py-3">
                   <div className="flex items-center gap-2">
-                    <Star className="h-5 w-5 text-accent-foreground" />
-                    <span className="text-sm font-black text-accent-foreground uppercase tracking-wide">TOTAL:</span>
-                    <span className="text-2xl font-black text-accent-foreground">{totalScore.toLocaleString()}</span>
+                    <Star className="h-5 w-5 text-white" />
+                    <span className="text-sm font-semibold text-white uppercase tracking-wide">TOTAL:</span>
+                    <span className="text-2xl font-bold text-white">{totalScore.toLocaleString()}</span>
                   </div>
                 </div>
               </div>
@@ -345,14 +345,14 @@ export default function Calculator() {
                           )}
                         </div>
                         <div>
-                          <h4 className="font-black text-foreground uppercase">{event.name}</h4>
-                          <p className="text-sm text-muted-foreground font-bold uppercase tracking-wide">
+                          <h4 className="font-semibold text-foreground uppercase">{event.name}</h4>
+                          <p className="text-sm text-muted-foreground font-medium uppercase tracking-wide">
                             {event.type === "time" ? "TIME" : "DISTANCE/HEIGHT"} ({event.unit})
                           </p>
                         </div>
                       </div>
                       <div className="space-y-2">
-                        <Label htmlFor={`result-${index}`} className="text-sm font-black text-foreground uppercase tracking-wide">
+                        <Label htmlFor={`result-${index}`} className="text-sm font-semibold text-foreground uppercase tracking-wide">
                           RESULT
                         </Label>
                         <Input
@@ -365,7 +365,7 @@ export default function Calculator() {
                         />
                       </div>
                       <div className="space-y-2">
-                        <Label htmlFor={`points-${index}`} className="text-sm font-black text-foreground uppercase tracking-wide">
+                        <Label htmlFor={`points-${index}`} className="text-sm font-semibold text-foreground uppercase tracking-wide">
                           POINTS
                         </Label>
                         <Input
@@ -385,7 +385,7 @@ export default function Calculator() {
               <div className="my-8 h-1 bg-border"></div>
 
               <div className="mb-6">
-                <Label htmlFor="performance-label" className="text-sm font-black text-foreground uppercase tracking-wide">
+                <Label htmlFor="performance-label" className="text-sm font-semibold text-foreground uppercase tracking-wide">
                   PERFORMANCE LABEL (OPTIONAL)
                 </Label>
                 <Input

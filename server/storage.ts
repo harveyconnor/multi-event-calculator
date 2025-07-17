@@ -8,6 +8,7 @@ export interface IStorage {
   getPerformances(eventType?: string): Promise<Performance[]>;
   deletePerformance(id: number): Promise<boolean>;
   getPerformance(id: number): Promise<Performance | undefined>;
+  updatePerformance(id: number, performance: InsertPerformance): Promise<Performance | undefined>;
 }
 
 export class MemStorage implements IStorage {
@@ -65,6 +66,21 @@ export class MemStorage implements IStorage {
 
   async getPerformance(id: number): Promise<Performance | undefined> {
     return this.performances.get(id);
+  }
+
+  async updatePerformance(id: number, insertPerformance: InsertPerformance): Promise<Performance | undefined> {
+    const existing = this.performances.get(id);
+    if (!existing) {
+      return undefined;
+    }
+    
+    const updated: Performance = {
+      ...insertPerformance,
+      id,
+      date: existing.date, // Keep original date
+    };
+    this.performances.set(id, updated);
+    return updated;
   }
 }
 

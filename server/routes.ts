@@ -46,6 +46,26 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Update performance
+  app.put("/api/performances/:id", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const validatedData = insertPerformanceSchema.parse(req.body);
+      const updated = await storage.updatePerformance(id, validatedData);
+      
+      if (!updated) {
+        return res.status(404).json({ message: "Performance not found" });
+      }
+      
+      res.json(updated);
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ message: "Invalid performance data", errors: error.errors });
+      }
+      res.status(500).json({ message: "Failed to update performance" });
+    }
+  });
+
   // Delete performance
   app.delete("/api/performances/:id", async (req, res) => {
     try {
