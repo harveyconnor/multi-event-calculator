@@ -65,6 +65,7 @@ export default function Calculator() {
   const [totalScore, setTotalScore] = useState(0);
   const [historyFilter, setHistoryFilter] = useState<string>("all");
   const [performanceLabel, setPerformanceLabel] = useState<string>("");
+  const [editingPerformanceId, setEditingPerformanceId] = useState<string | null>(null);
   
   const autoSaveTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -79,11 +80,12 @@ export default function Calculator() {
   });
 
   const savePerformanceMutation = useMutation({
-    mutationFn: async (performance: { eventType: string; eventResults: EventResult[]; totalScore: number; label?: string }) => {
+    mutationFn: async (performance: { uuid: string; eventType: string; eventResults: EventResult[]; totalScore: number; label?: string }) => {
       return await apiRequest("POST", "/api/performances", performance);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/performances"] });
+      setEditingPerformanceId(null);
       toast({
         title: "Performance Saved",
         description: "Your performance has been saved successfully",
@@ -93,6 +95,27 @@ export default function Calculator() {
       toast({
         title: "Error",
         description: "Failed to save performance",
+        variant: "destructive",
+      });
+    }
+  });
+
+  const updatePerformanceMutation = useMutation({
+    mutationFn: async (performance: { uuid: string; eventType: string; eventResults: EventResult[]; totalScore: number; label?: string }) => {
+      return await apiRequest("PUT", `/api/performances/${performance.uuid}`, performance);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/performances"] });
+      setEditingPerformanceId(null);
+      toast({
+        title: "Performance Updated",
+        description: "Your performance has been updated successfully",
+      });
+    },
+    onError: () => {
+      toast({
+        title: "Error",
+        description: "Failed to update performance",
         variant: "destructive",
       });
     }
@@ -174,12 +197,25 @@ export default function Calculator() {
   const savePerformance = () => {
     if (!selectedEventType || totalScore === 0) return;
     
-    savePerformanceMutation.mutate({
-      eventType: selectedEventType,
-      eventResults: eventResults,
-      totalScore: totalScore,
-      label: performanceLabel || undefined,
-    });
+    if (editingPerformanceId) {
+      // Update existing performance
+      updatePerformanceMutation.mutate({
+        uuid: editingPerformanceId,
+        eventType: selectedEventType,
+        eventResults: eventResults,
+        totalScore: totalScore,
+        label: performanceLabel || undefined,
+      });
+    } else {
+      // Create new performance
+      savePerformanceMutation.mutate({
+        uuid: crypto.randomUUID(),
+        eventType: selectedEventType,
+        eventResults: eventResults,
+        totalScore: totalScore,
+        label: performanceLabel || undefined,
+      });
+    }
   };
 
   const clearAll = () => {
@@ -195,6 +231,7 @@ export default function Calculator() {
       setEventResults(newResults);
       setTotalScore(0);
       setPerformanceLabel("");
+      setEditingPerformanceId(null);
       
       toast({
         title: "Cleared",
@@ -205,6 +242,19 @@ export default function Calculator() {
 
   const deletePerformance = (id: number) => {
     deletePerformanceMutation.mutate(id);
+  };
+
+  const loadPerformance = (performance: Performance) => {
+    setSelectedEventType(performance.eventType as EventType);
+    setEventResults(performance.eventResults as EventResult[]);
+    setTotalScore(performance.totalScore);
+    setPerformanceLabel(performance.label || "");
+    setEditingPerformanceId(performance.uuid);
+    
+    toast({
+      title: "Performance Loaded",
+      description: "Performance loaded for editing",
+    });
   };
 
   const getEventTypeIcon = (eventType: EventType) => {
@@ -371,9 +421,9 @@ export default function Calculator() {
                 ))}
               </div>
 
-              <div className="mb-6">
+              <div className="mb-6 mt-8">
                 <Label htmlFor="performance-label" className="text-sm font-semibold text-foreground uppercase tracking-wide">
-                  LABEL (OPTIONAL)
+                  LABEL
                 </Label>
                 <Input
                   id="performance-label"
@@ -388,11 +438,11 @@ export default function Calculator() {
               <div className="flex justify-center space-x-4">
                 <Button 
                   onClick={() => savePerformance()}
-                  disabled={totalScore === 0 || !selectedEventType || savePerformanceMutation.isPending}
+                  disabled={totalScore === 0 || !selectedEventType || savePerformanceMutation.isPending || updatePerformanceMutation.isPending}
                   className="glass-button bg-blue-500/20 text-blue-200 hover:bg-blue-500/30 border-blue-400/30 transition-all duration-200"
                 >
                   <Save className="h-4 w-4 mr-2" />
-                  {savePerformanceMutation.isPending ? 'SAVING...' : 'SAVE PERFORMANCE'}
+                  {savePerformanceMutation.isPending || updatePerformanceMutation.isPending ? 'SAVING...' : (editingPerformanceId ? 'UPDATE PERFORMANCE' : 'SAVE PERFORMANCE')}
                 </Button>
                 <Button onClick={clearAll} className="glass-button bg-red-500/20 text-red-200 hover:bg-red-500/30 border-red-400/30 transition-all duration-200">
                   <Eraser className="h-4 w-4 mr-2" />
@@ -474,12 +524,16 @@ export default function Calculator() {
                             {performance.eventType}
                           </Badge>
                         </TableCell>
-                        <TableCell className="font-black text-primary text-lg">
+                        <TableCell className="font-black text-white text-lg">
                           {performance.totalScore.toLocaleString()}
                         </TableCell>
                         <TableCell>
                           <div className="flex space-x-2">
-                            <Button size="sm" className="glass-button bg-blue-500/20 text-blue-200 hover:bg-blue-500/30 border-blue-400/30 p-2 transition-all duration-200">
+                            <Button 
+                              size="sm" 
+                              onClick={() => loadPerformance(performance)}
+                              className="glass-button bg-blue-500/20 text-blue-200 hover:bg-blue-500/30 border-blue-400/30 p-2 transition-all duration-200"
+                            >
                               <Eye className="h-4 w-4" />
                             </Button>
                             <Button 

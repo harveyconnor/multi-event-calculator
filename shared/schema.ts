@@ -10,6 +10,7 @@ export const users = pgTable("users", {
 
 export const performances = pgTable("performances", {
   id: serial("id").primaryKey(),
+  uuid: text("uuid").notNull().unique(),
   eventType: text("event_type").notNull(),
   eventResults: jsonb("event_results").notNull(),
   totalScore: integer("total_score").notNull(),

@@ -9,6 +9,7 @@ export interface IStorage {
   deletePerformance(id: number): Promise<boolean>;
   getPerformance(id: number): Promise<Performance | undefined>;
   updatePerformance(id: number, performance: InsertPerformance): Promise<Performance | undefined>;
+  updatePerformanceByUuid(uuid: string, performance: InsertPerformance): Promise<Performance | undefined>;
 }
 
 export class MemStorage implements IStorage {
@@ -80,6 +81,21 @@ export class MemStorage implements IStorage {
       date: existing.date, // Keep original date
     };
     this.performances.set(id, updated);
+    return updated;
+  }
+
+  async updatePerformanceByUuid(uuid: string, insertPerformance: InsertPerformance): Promise<Performance | undefined> {
+    const existing = Array.from(this.performances.values()).find(p => p.uuid === uuid);
+    if (!existing) {
+      return undefined;
+    }
+    
+    const updated: Performance = {
+      ...insertPerformance,
+      id: existing.id,
+      date: existing.date, // Keep original date
+    };
+    this.performances.set(existing.id, updated);
     return updated;
   }
 }

@@ -46,12 +46,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Update performance
-  app.put("/api/performances/:id", async (req, res) => {
+  // Update performance by UUID
+  app.put("/api/performances/:uuid", async (req, res) => {
     try {
-      const id = parseInt(req.params.id);
+      const uuid = req.params.uuid;
       const validatedData = insertPerformanceSchema.parse(req.body);
-      const updated = await storage.updatePerformance(id, validatedData);
+      const updated = await storage.updatePerformanceByUuid(uuid, validatedData);
       
       if (!updated) {
         return res.status(404).json({ message: "Performance not found" });

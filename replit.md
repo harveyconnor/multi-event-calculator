@@ -49,7 +49,7 @@ Typography: Inter font family with medium weight for enhanced readability and mo
 
 ### Database Schema
 - **Users Table**: Authentication and user management
-- **Performances Table**: Event results with JSON storage for flexible event data, now includes optional labels
+- **Performances Table**: Event results with JSON storage for flexible event data, includes optional labels and UUID for tracking
 - **Validation**: Zod schemas for runtime type checking and API validation
 
 ### Scoring System
@@ -60,14 +60,17 @@ Typography: Inter font family with medium weight for enhanced readability and mo
 ### API Endpoints
 - `GET /api/performances` - Retrieve all performances with optional event type filtering
 - `GET /api/performances/:id` - Get single performance by ID
-- `POST /api/performances` - Create new performance with validation
+- `POST /api/performances` - Create new performance with UUID and validation
+- `PUT /api/performances/:uuid` - Update existing performance by UUID
 - `DELETE /api/performances/:id` - Delete performance by ID
 
 ### Frontend Features
 - **Calculator Interface**: Form-based input for each event type
 - **Results Display**: Table view of all results with sorting and filtering
 - **Performance Tracking**: Historical performance data with date tracking
-- **Performance Labels**: Optional labels for performances (e.g., "Personal Best", "Competition")
+- **Performance Labels**: Optional labels for performances (simplified to "Label")
+- **Performance Editing**: Click history items to load and edit existing performances using UUID tracking
+- **Manual Save Control**: Save performances manually with "SAVE PERFORMANCE" button (no auto-save)
 - **Responsive Design**: Mobile-optimized interface with adaptive components
 - **Glassmorphism Design**: Translucent UI elements with blur effects, subtle gradients, and layered transparency
 - **Dark Mode Support**: System theme detection with manual toggle between light/dark/system modes
