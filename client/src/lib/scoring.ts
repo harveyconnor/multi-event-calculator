@@ -2,39 +2,41 @@
 // Track events: points = A * (B - T)^C where T is time in seconds
 // Field events: points = A * (M - B)^C where M is measurement in meters
 
+// World Athletics scoring table constants
+// Some field events use centimeters in formulas but we display in meters
 const scoringTables = {
   // Men's Decathlon
   decathlon: {
-    "100m": { A: 25.4347, B: 18, C: 1.81 },
-    "Long Jump": { A: 0.14354, B: 220, C: 1.4 },
-    "Shot Put": { A: 51.39, B: 1.5, C: 1.05 },
-    "High Jump": { A: 0.8465, B: 75, C: 1.42 },
-    "400m": { A: 1.53775, B: 82, C: 1.81 },
-    "110m Hurdles": { A: 5.74352, B: 28.5, C: 1.92 },
-    "Discus": { A: 12.91, B: 4, C: 1.1 },
-    "Pole Vault": { A: 0.2797, B: 100, C: 1.35 },
-    "Javelin": { A: 10.14, B: 7, C: 1.08 },
-    "1500m": { A: 0.03768, B: 480, C: 1.85 }
+    "100m": { A: 25.4347, B: 18, C: 1.81, unit: "seconds" },
+    "Long Jump": { A: 0.14354, B: 220, C: 1.4, unit: "cm" }, // Formula uses cm
+    "Shot Put": { A: 51.39, B: 1.5, C: 1.05, unit: "meters" },
+    "High Jump": { A: 0.8465, B: 75, C: 1.42, unit: "cm" }, // Formula uses cm
+    "400m": { A: 1.53775, B: 82, C: 1.81, unit: "seconds" },
+    "110m Hurdles": { A: 5.74352, B: 28.5, C: 1.92, unit: "seconds" },
+    "Discus": { A: 12.91, B: 4, C: 1.1, unit: "meters" },
+    "Pole Vault": { A: 0.2797, B: 100, C: 1.35, unit: "cm" }, // Formula uses cm
+    "Javelin": { A: 10.14, B: 7, C: 1.08, unit: "meters" },
+    "1500m": { A: 0.03768, B: 480, C: 1.85, unit: "seconds" }
   },
   
   // Women's Heptathlon
   heptathlon: {
-    "100m Hurdles": { A: 9.23076, B: 26.7, C: 1.835 },
-    "High Jump": { A: 1.84523, B: 75, C: 1.348 },
-    "Shot Put": { A: 56.0211, B: 1.5, C: 1.05 },
-    "200m": { A: 4.99087, B: 42.5, C: 1.81 },
-    "Long Jump": { A: 0.188807, B: 210, C: 1.41 },
-    "Javelin": { A: 15.9803, B: 3.8, C: 1.04 },
-    "800m": { A: 0.11193, B: 254, C: 1.88 }
+    "100m Hurdles": { A: 9.23076, B: 26.7, C: 1.835, unit: "seconds" },
+    "High Jump": { A: 1.84523, B: 75, C: 1.348, unit: "cm" }, // Formula uses cm
+    "Shot Put": { A: 56.0211, B: 1.5, C: 1.05, unit: "meters" },
+    "200m": { A: 4.99087, B: 42.5, C: 1.81, unit: "seconds" },
+    "Long Jump": { A: 0.188807, B: 210, C: 1.41, unit: "cm" }, // Formula uses cm
+    "Javelin": { A: 15.9803, B: 3.8, C: 1.04, unit: "meters" },
+    "800m": { A: 0.11193, B: 254, C: 1.88, unit: "seconds" }
   },
 
   // Women's Pentathlon
   pentathlon: {
-    "100m Hurdles": { A: 9.23076, B: 26.7, C: 1.835 },
-    "High Jump": { A: 1.84523, B: 75, C: 1.348 },
-    "Shot Put": { A: 56.0211, B: 1.5, C: 1.05 },
-    "200m": { A: 4.99087, B: 42.5, C: 1.81 },
-    "800m": { A: 0.11193, B: 254, C: 1.88 }
+    "100m Hurdles": { A: 9.23076, B: 26.7, C: 1.835, unit: "seconds" },
+    "High Jump": { A: 1.84523, B: 75, C: 1.348, unit: "cm" }, // Formula uses cm
+    "Shot Put": { A: 56.0211, B: 1.5, C: 1.05, unit: "meters" },
+    "200m": { A: 4.99087, B: 42.5, C: 1.81, unit: "seconds" },
+    "800m": { A: 0.11193, B: 254, C: 1.88, unit: "seconds" }
   }
 };
 
@@ -45,7 +47,7 @@ export function calculatePoints(eventType: string, eventName: string, result: st
   const formula = tables[eventName as keyof typeof tables];
   if (!formula) return 0;
 
-  const { A, B, C } = formula;
+  const { A, B, C, unit } = formula;
   let measurement: number;
 
   if (type === 'time') {
@@ -60,6 +62,11 @@ export function calculatePoints(eventType: string, eventName: string, result: st
     // For field events: points = A * (M - B)^C
     measurement = parseFloat(result);
     if (isNaN(measurement) || measurement <= 0) return 0;
+    
+    // Convert meters to centimeters if formula uses cm
+    if (unit === "cm") {
+      measurement = measurement * 100;
+    }
     
     const points = A * Math.pow(measurement - B, C);
     return Math.max(0, Math.round(points));
@@ -90,7 +97,7 @@ export function estimateResult(eventType: string, eventName: string, points: num
   const formula = tables[eventName as keyof typeof tables];
   if (!formula) return "";
 
-  const { A, B, C } = formula;
+  const { A, B, C, unit } = formula;
 
   if (type === 'time') {
     // For track events: T = B - (points/A)^(1/C)
@@ -98,7 +105,13 @@ export function estimateResult(eventType: string, eventName: string, points: num
     return formatTime(time);
   } else {
     // For field events: M = B + (points/A)^(1/C)
-    const measurement = B + Math.pow(points / A, 1 / C);
+    let measurement = B + Math.pow(points / A, 1 / C);
+    
+    // Convert centimeters to meters if formula uses cm
+    if (unit === "cm") {
+      measurement = measurement / 100;
+    }
+    
     return measurement.toFixed(2);
   }
 }
