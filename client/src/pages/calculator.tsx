@@ -233,10 +233,10 @@ export default function Calculator() {
 
   const getEventTypeBadgeColor = (eventType: string) => {
     switch (eventType) {
-      case "pentathlon": return "bg-success text-success-foreground";
-      case "heptathlon": return "bg-secondary text-secondary-foreground";
-      case "decathlon": return "bg-primary text-primary-foreground";
-      default: return "bg-gray-500 text-white";
+      case "pentathlon": return "bg-emerald-500/20 text-emerald-200 border-emerald-400/30";
+      case "heptathlon": return "bg-violet-500/20 text-violet-200 border-violet-400/30";
+      case "decathlon": return "bg-blue-500/20 text-blue-200 border-blue-400/30";
+      default: return "bg-gray-500/20 text-gray-200 border-gray-400/30";
     }
   };
 
@@ -280,10 +280,10 @@ export default function Calculator() {
               {(Object.keys(eventConfigs) as EventType[]).map((eventType) => (
                 <Button
                   key={eventType}
-                  className={`h-auto p-6 glass-button ${
+                  className={`h-auto p-6 glass-button transition-all duration-200 ${
                     selectedEventType === eventType
-                      ? "bg-blue-500/30 text-white border-blue-400/50"
-                      : "text-foreground hover:text-foreground"
+                      ? "bg-blue-500/30 text-white border-blue-400/50 shadow-lg shadow-blue-500/20"
+                      : "text-foreground hover:text-foreground hover:shadow-lg"
                   }`}
                   onClick={() => selectEventType(eventType)}
                 >
@@ -333,10 +333,10 @@ export default function Calculator() {
                   <div key={index} className="glass-event-card p-6">
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-center">
                       <div className="flex items-center space-x-4">
-                        <div className={`p-3 glass-card ${
+                        <div className={`p-3 glass-card transition-all duration-200 ${
                           event.type === "time" 
-                            ? "bg-blue-500/20 text-blue-200"
-                            : "bg-purple-500/20 text-purple-200"
+                            ? "bg-blue-500/20 text-blue-200 border-blue-400/30"
+                            : "bg-purple-500/20 text-purple-200 border-purple-400/30"
                         }`}>
                           {event.type === "time" ? (
                             <Clock className="h-5 w-5" />
@@ -399,7 +399,7 @@ export default function Calculator() {
               </div>
 
               <div className="flex justify-center">
-                <Button onClick={clearAll} className="glass-button bg-red-500/20 text-red-200 hover:bg-red-500/30">
+                <Button onClick={clearAll} className="glass-button bg-red-500/20 text-red-200 hover:bg-red-500/30 border-red-400/30 transition-all duration-200">
                   <Eraser className="h-4 w-4 mr-2" />
                   CLEAR ALL
                 </Button>
@@ -465,7 +465,7 @@ export default function Calculator() {
                         </TableCell>
                         <TableCell className="text-sm text-foreground font-bold">
                           {performance.label ? (
-                            <Badge className="glass-badge bg-muted text-muted-foreground">
+                            <Badge className="glass-badge bg-slate-500/20 text-slate-200 border-slate-400/30">
                               {performance.label}
                             </Badge>
                           ) : (
@@ -482,14 +482,14 @@ export default function Calculator() {
                         </TableCell>
                         <TableCell>
                           <div className="flex space-x-2">
-                            <Button size="sm" className="glass-button bg-blue-500/20 text-blue-200 p-2">
+                            <Button size="sm" className="glass-button bg-blue-500/20 text-blue-200 hover:bg-blue-500/30 border-blue-400/30 p-2 transition-all duration-200">
                               <Eye className="h-4 w-4" />
                             </Button>
                             <Button 
                               size="sm"
                               onClick={() => deletePerformance(performance.id)}
                               disabled={deletePerformanceMutation.isPending}
-                              className="glass-button bg-red-500/20 text-red-200 p-2"
+                              className="glass-button bg-red-500/20 text-red-200 hover:bg-red-500/30 border-red-400/30 p-2 transition-all duration-200"
                             >
                               <Trash2 className="h-4 w-4" />
                             </Button>

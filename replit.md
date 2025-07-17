@@ -8,6 +8,7 @@ This is a full-stack web application for calculating and tracking track and fiel
 
 Preferred communication style: Simple, everyday language.
 Design theme: Glassmorphism - translucent elements, blur effects, subtle gradients, layered transparency.
+Default theme: Dark mode with enhanced glassmorphism effects.
 
 ## System Architecture
 
