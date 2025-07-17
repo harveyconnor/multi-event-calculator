@@ -1,4 +1,4 @@
-import { users, performances, type User, type InsertUser, type Performance, type InsertPerformance } from "@shared/schema";
+import { users, performances, achievements, type User, type InsertUser, type Performance, type InsertPerformance, type Achievement, type InsertAchievement } from "@shared/schema";
 
 export interface IStorage {
   getUser(id: number): Promise<User | undefined>;
@@ -10,19 +10,27 @@ export interface IStorage {
   getPerformance(id: number): Promise<Performance | undefined>;
   updatePerformance(id: number, performance: InsertPerformance): Promise<Performance | undefined>;
   updatePerformanceByUuid(uuid: string, performance: InsertPerformance): Promise<Performance | undefined>;
+  createAchievement(achievement: InsertAchievement): Promise<Achievement>;
+  getAchievements(userId?: number): Promise<Achievement[]>;
+  getAchievement(id: number): Promise<Achievement | undefined>;
+  hasAchievement(userId: number, achievementType: string): Promise<boolean>;
 }
 
 export class MemStorage implements IStorage {
   private users: Map<number, User>;
   private performances: Map<number, Performance>;
+  private achievements: Map<number, Achievement>;
   private currentUserId: number;
   private currentPerformanceId: number;
+  private currentAchievementId: number;
 
   constructor() {
     this.users = new Map();
     this.performances = new Map();
+    this.achievements = new Map();
     this.currentUserId = 1;
     this.currentPerformanceId = 1;
+    this.currentAchievementId = 1;
   }
 
   async getUser(id: number): Promise<User | undefined> {
@@ -97,6 +105,35 @@ export class MemStorage implements IStorage {
     };
     this.performances.set(existing.id, updated);
     return updated;
+  }
+
+  async createAchievement(insertAchievement: InsertAchievement): Promise<Achievement> {
+    const id = this.currentAchievementId++;
+    const achievement: Achievement = {
+      ...insertAchievement,
+      id,
+      unlockedAt: new Date(),
+    };
+    this.achievements.set(id, achievement);
+    return achievement;
+  }
+
+  async getAchievements(userId?: number): Promise<Achievement[]> {
+    const allAchievements = Array.from(this.achievements.values());
+    if (userId) {
+      return allAchievements.filter(a => a.userId === userId);
+    }
+    return allAchievements.sort((a, b) => new Date(b.unlockedAt).getTime() - new Date(a.unlockedAt).getTime());
+  }
+
+  async getAchievement(id: number): Promise<Achievement | undefined> {
+    return this.achievements.get(id);
+  }
+
+  async hasAchievement(userId: number, achievementType: string): Promise<boolean> {
+    return Array.from(this.achievements.values()).some(
+      a => a.userId === userId && a.achievementType === achievementType
+    );
   }
 }
 

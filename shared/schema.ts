@@ -18,6 +18,17 @@ export const performances = pgTable("performances", {
   label: text("label"),
 });
 
+export const achievements = pgTable("achievements", {
+  id: serial("id").primaryKey(),
+  userId: integer("user_id").default(1), // Default user for now
+  achievementType: text("achievement_type").notNull(),
+  title: text("title").notNull(),
+  description: text("description").notNull(),
+  points: integer("points").notNull(),
+  unlockedAt: timestamp("unlocked_at").notNull().defaultNow(),
+  metadata: jsonb("metadata"), // Store additional achievement data
+});
+
 export const insertUserSchema = createInsertSchema(users).pick({
   username: true,
   password: true,
@@ -30,10 +41,17 @@ export const insertPerformanceSchema = createInsertSchema(performances).omit({
   label: z.string().optional(),
 });
 
+export const insertAchievementSchema = createInsertSchema(achievements).omit({
+  id: true,
+  unlockedAt: true,
+});
+
 export type InsertUser = z.infer<typeof insertUserSchema>;
 export type User = typeof users.$inferSelect;
 export type InsertPerformance = z.infer<typeof insertPerformanceSchema>;
 export type Performance = typeof performances.$inferSelect;
+export type InsertAchievement = z.infer<typeof insertAchievementSchema>;
+export type Achievement = typeof achievements.$inferSelect;
 
 export type EventResult = {
   name: string;

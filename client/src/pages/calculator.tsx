@@ -9,12 +9,13 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 
-import { Trash2, Eye, Calculator as CalculatorIcon, Save, Eraser, Trophy, Medal, Crown, Clock, Ruler, Target, Zap, Star, History, ToggleLeft, ToggleRight } from "lucide-react";
+import { Trash2, Eye, Calculator as CalculatorIcon, Save, Eraser, Trophy, Medal, Crown, Clock, Ruler, Target, Zap, Star, History, ToggleLeft, ToggleRight, Award } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { queryClient } from "@/lib/queryClient";
 import { apiRequest } from "@/lib/queryClient";
-import { type Performance, type EventResult } from "@shared/schema";
+import { type Performance, type EventResult, type Achievement } from "@shared/schema";
 import { calculatePoints, estimateResult } from "@/lib/scoring";
+import AchievementTimeline from "@/components/AchievementTimeline";
 
 type EventType = "decathlon" | "heptathlon" | "pentathlon";
 
@@ -82,6 +83,7 @@ export default function Calculator() {
   const [performanceLabel, setPerformanceLabel] = useState<string>("");
   const [editingPerformanceId, setEditingPerformanceId] = useState<string | null>(null);
   const [isMetric, setIsMetric] = useState<boolean>(true);
+  const [newAchievements, setNewAchievements] = useState<Achievement[]>([]);
   
   const autoSaveTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -178,8 +180,33 @@ export default function Calculator() {
       const response = await apiRequest("POST", "/api/performances", performance);
       return await response.json();
     },
-    onSuccess: (savedPerformance) => {
+    onSuccess: async (savedPerformance) => {
       queryClient.invalidateQueries({ queryKey: ["/api/performances"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/achievements"] });
+      
+      // Check for achievements after saving performance
+      try {
+        const achievementResponse = await fetch("/api/achievements/check", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ userId: 1, performance: savedPerformance })
+        });
+        
+        if (achievementResponse.ok) {
+          const achievements = await achievementResponse.json();
+          if (achievements.length > 0) {
+            setNewAchievements(achievements);
+            // Show achievement toast
+            toast({
+              title: "🎉 Achievement Unlocked!",
+              description: `You earned ${achievements.length} new achievement${achievements.length > 1 ? 's' : ''}!`,
+            });
+          }
+        }
+      } catch (error) {
+        console.error("Failed to check achievements:", error);
+      }
+      
       // Set the editing ID to the newly created performance UUID so subsequent saves are updates
       console.log("Saved performance:", savedPerformance);
       setEditingPerformanceId(savedPerformance.uuid);
@@ -343,6 +370,7 @@ export default function Calculator() {
       setTotalScore(0);
       setPerformanceLabel("");
       setEditingPerformanceId(null);
+      setNewAchievements([]);
       
       toast({
         title: "Cleared",
@@ -415,50 +443,53 @@ export default function Calculator() {
       </header>
 
       <div className="container mx-auto px-4 py-4 max-w-7xl">
-        {/* Event Type Selection */}
-        <Card className="mb-4 glass-card">
-          <CardHeader className="pb-3">
-            <CardTitle className="flex items-center gap-2 text-lg font-semibold tracking-wide">
-              <div className="glass-icon-container w-6 h-6 flex items-center justify-center bg-gradient-to-br from-blue-500/20 to-purple-500/20 border-blue-400/30">
-                <Target className="h-3 w-3 text-white" />
-              </div>
-              Select Event Type
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="p-4">
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-              {(Object.keys(eventConfigs) as EventType[]).map((eventType) => (
-                <Button
-                  key={eventType}
-                  className={`h-auto p-3 glass-button transition-all duration-200 ${
-                    selectedEventType === eventType
-                      ? "bg-blue-500/30 text-white border-blue-400/50 shadow-lg shadow-blue-500/20"
-                      : "text-foreground hover:text-foreground hover:shadow-lg"
-                  }`}
-                  onClick={() => selectEventType(eventType)}
-                >
-                  <div className="flex items-center space-x-3">
-                    <div className={`p-2 glass-icon-container ${
-                      selectedEventType === eventType 
-                        ? "bg-blue-500/30 text-white border-blue-400/50" 
-                        : "text-white"
-                    }`}>
-                      {getEventTypeIcon(eventType)}
-                    </div>
-                    <div className="text-left">
-                      <h3 className="font-semibold text-base">{eventConfigs[eventType].name}</h3>
-                      <p className="text-xs font-medium">{eventConfigs[eventType].events.length} Events</p>
-                    </div>
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+          {/* Main Calculator Content */}
+          <div className="lg:col-span-2 space-y-4">
+            {/* Event Type Selection */}
+            <Card className="glass-card">
+              <CardHeader className="pb-3">
+                <CardTitle className="flex items-center gap-2 text-lg font-semibold tracking-wide">
+                  <div className="glass-icon-container w-6 h-6 flex items-center justify-center bg-gradient-to-br from-blue-500/20 to-purple-500/20 border-blue-400/30">
+                    <Target className="h-3 w-3 text-white" />
                   </div>
-                </Button>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
+                  Select Event Type
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="p-4">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                  {(Object.keys(eventConfigs) as EventType[]).map((eventType) => (
+                    <Button
+                      key={eventType}
+                      className={`h-auto p-3 glass-button transition-all duration-200 ${
+                        selectedEventType === eventType
+                          ? "bg-blue-500/30 text-white border-blue-400/50 shadow-lg shadow-blue-500/20"
+                          : "text-foreground hover:text-foreground hover:shadow-lg"
+                      }`}
+                      onClick={() => selectEventType(eventType)}
+                    >
+                      <div className="flex items-center space-x-3">
+                        <div className={`p-2 glass-icon-container ${
+                          selectedEventType === eventType 
+                            ? "bg-blue-500/30 text-white border-blue-400/50" 
+                            : "text-white"
+                        }`}>
+                          {getEventTypeIcon(eventType)}
+                        </div>
+                        <div className="text-left">
+                          <h3 className="font-semibold text-base">{eventConfigs[eventType].name}</h3>
+                          <p className="text-xs font-medium">{eventConfigs[eventType].events.length} Events</p>
+                        </div>
+                      </div>
+                    </Button>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
 
-        {/* Event Calculator */}
-        {selectedEventType && (
-          <Card className="mb-4 glass-card">
+            {/* Event Calculator */}
+            {selectedEventType && (
+              <Card className="glass-card">
             <CardHeader className="pb-3">
               <div className="flex items-center justify-between">
                 <CardTitle className="flex items-center gap-2 text-lg font-semibold tracking-wide">
@@ -570,107 +601,120 @@ export default function Calculator() {
           </Card>
         )}
 
-        {/* Performance History */}
-        <Card className="glass-card">
-          <CardHeader className="pb-3">
-            <div className="flex items-center justify-between">
-              <CardTitle className="flex items-center gap-2 text-lg font-semibold tracking-wide">
-                <div className="glass-icon-container w-6 h-6 flex items-center justify-center bg-gradient-to-br from-green-500/20 to-emerald-500/20 border-green-400/30">
-                  <Trophy className="h-3 w-3 text-white" />
+            {/* Performance History */}
+            <Card className="glass-card">
+              <CardHeader className="pb-3">
+                <div className="flex items-center justify-between">
+                  <CardTitle className="flex items-center gap-2 text-lg font-semibold tracking-wide">
+                    <div className="glass-icon-container w-6 h-6 flex items-center justify-center bg-gradient-to-br from-green-500/20 to-emerald-500/20 border-green-400/30">
+                      <Trophy className="h-3 w-3 text-white" />
+                    </div>
+                    Performance History
+                  </CardTitle>
+                  <div className="flex items-center space-x-3">
+                    <Select value={historyFilter} onValueChange={setHistoryFilter}>
+                      <SelectTrigger className="w-32 glass-select text-foreground text-sm">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent className="glass-dropdown">
+                        <SelectItem value="all" className="glass-dropdown-item">All Events</SelectItem>
+                        <SelectItem value="decathlon" className="glass-dropdown-item">Decathlon</SelectItem>
+                        <SelectItem value="heptathlon" className="glass-dropdown-item">Heptathlon</SelectItem>
+                        <SelectItem value="pentathlon" className="glass-dropdown-item">Pentathlon</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
                 </div>
-                Performance History
-              </CardTitle>
-              <div className="flex items-center space-x-3">
-                <Select value={historyFilter} onValueChange={setHistoryFilter}>
-                  <SelectTrigger className="w-32 glass-select text-foreground text-sm">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent className="glass-dropdown">
-                    <SelectItem value="all" className="glass-dropdown-item">All Events</SelectItem>
-                    <SelectItem value="decathlon" className="glass-dropdown-item">Decathlon</SelectItem>
-                    <SelectItem value="heptathlon" className="glass-dropdown-item">Heptathlon</SelectItem>
-                    <SelectItem value="pentathlon" className="glass-dropdown-item">Pentathlon</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
+              </CardHeader>
+              <CardContent className="p-4">
+                {isLoading ? (
+                  <div className="text-center py-12">
+                    <div className="w-12 h-12 border-4 border-white/20 border-t-blue-400 mx-auto mb-4 animate-spin rounded-full glass-card"></div>
+                    <p className="text-muted-foreground font-bold tracking-wide">Loading Performances...</p>
+                  </div>
+                ) : performances.length === 0 ? (
+                  <div className="text-center py-8">
+                    <div className="glass-icon-container w-16 h-16 flex items-center justify-center mx-auto mb-4 transform rotate-12 bg-gradient-to-br from-purple-500/20 to-blue-500/20 border-purple-400/30">
+                      <Trophy className="h-8 w-8 text-white" />
+                    </div>
+                    <p className="text-muted-foreground font-semibold tracking-wide text-sm">No Performances Recorded Yet</p>
+                    <p className="text-xs text-muted-foreground mt-1 font-medium">Start by selecting an event type and entering results</p>
+                  </div>
+                ) : (
+                  <div className="overflow-x-auto">
+                    <Table className="glass-table">
+                      <TableHeader>
+                        <TableRow>
+                          <TableHead className="text-foreground font-black tracking-wide">Date</TableHead>
+                          <TableHead className="text-foreground font-black tracking-wide">Label</TableHead>
+                          <TableHead className="text-foreground font-black tracking-wide">Event Type</TableHead>
+                          <TableHead className="text-foreground font-black tracking-wide">Total Score</TableHead>
+                          <TableHead className="text-foreground font-black tracking-wide">Actions</TableHead>
+                        </TableRow>
+                      </TableHeader>
+                      <TableBody>
+                        {performances.map((performance) => (
+                          <TableRow key={performance.id} className="hover:bg-muted/50 transition-colors">
+                            <TableCell className="text-xs text-foreground font-bold py-2">
+                              {new Date(performance.date).toLocaleDateString()}
+                            </TableCell>
+                            <TableCell className="text-xs text-foreground font-bold py-2">
+                              {performance.label ? (
+                                <Badge className="glass-badge bg-slate-500/20 text-slate-200 border-slate-400/30 text-xs">
+                                  {performance.label}
+                                </Badge>
+                              ) : (
+                                <span className="text-muted-foreground font-normal">—</span>
+                              )}
+                            </TableCell>
+                            <TableCell className="py-2">
+                              <Badge className={`${getEventTypeBadgeColor(performance.eventType)} glass-badge text-xs`}>
+                                {performance.eventType}
+                              </Badge>
+                            </TableCell>
+                            <TableCell className="font-black text-white text-sm py-2">
+                              {performance.totalScore.toLocaleString()}
+                            </TableCell>
+                            <TableCell className="py-2">
+                              <div className="flex space-x-1">
+                                <Button 
+                                  size="sm" 
+                                  onClick={() => loadPerformance(performance)}
+                                  className="glass-button bg-blue-500/20 text-blue-200 hover:bg-blue-500/30 border-blue-400/30 p-1.5 transition-all duration-200"
+                                >
+                                  <Eye className="h-3 w-3" />
+                                </Button>
+                                <Button 
+                                  size="sm"
+                                  onClick={() => deletePerformance(performance.id)}
+                                  disabled={deletePerformanceMutation.isPending}
+                                  className="glass-button bg-red-500/20 text-red-200 hover:bg-red-500/30 border-red-400/30 p-1.5 transition-all duration-200"
+                                >
+                                  <Trash2 className="h-3 w-3" />
+                                </Button>
+                              </div>
+                            </TableCell>
+                          </TableRow>
+                        ))}
+                      </TableBody>
+                    </Table>
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+          </div>
+          
+          {/* Achievement Timeline Sidebar */}
+          <div className="lg:col-span-1">
+            <div className="sticky top-4">
+              <AchievementTimeline 
+                userId={1} 
+                newAchievements={newAchievements}
+                onClose={() => setNewAchievements([])}
+              />
             </div>
-          </CardHeader>
-          <CardContent className="p-4">
-            {isLoading ? (
-              <div className="text-center py-12">
-                <div className="w-12 h-12 border-4 border-white/20 border-t-blue-400 mx-auto mb-4 animate-spin rounded-full glass-card"></div>
-                <p className="text-muted-foreground font-bold tracking-wide">Loading Performances...</p>
-              </div>
-            ) : performances.length === 0 ? (
-              <div className="text-center py-8">
-                <div className="glass-icon-container w-16 h-16 flex items-center justify-center mx-auto mb-4 transform rotate-12 bg-gradient-to-br from-purple-500/20 to-blue-500/20 border-purple-400/30">
-                  <Trophy className="h-8 w-8 text-white" />
-                </div>
-                <p className="text-muted-foreground font-semibold tracking-wide text-sm">No Performances Recorded Yet</p>
-                <p className="text-xs text-muted-foreground mt-1 font-medium">Start by selecting an event type and entering results</p>
-              </div>
-            ) : (
-              <div className="overflow-x-auto">
-                <Table className="glass-table">
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead className="text-foreground font-black tracking-wide">Date</TableHead>
-                      <TableHead className="text-foreground font-black tracking-wide">Label</TableHead>
-                      <TableHead className="text-foreground font-black tracking-wide">Event Type</TableHead>
-                      <TableHead className="text-foreground font-black tracking-wide">Total Score</TableHead>
-                      <TableHead className="text-foreground font-black tracking-wide">Actions</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {performances.map((performance) => (
-                      <TableRow key={performance.id} className="hover:bg-muted/50 transition-colors">
-                        <TableCell className="text-xs text-foreground font-bold py-2">
-                          {new Date(performance.date).toLocaleDateString()}
-                        </TableCell>
-                        <TableCell className="text-xs text-foreground font-bold py-2">
-                          {performance.label ? (
-                            <Badge className="glass-badge bg-slate-500/20 text-slate-200 border-slate-400/30 text-xs">
-                              {performance.label}
-                            </Badge>
-                          ) : (
-                            <span className="text-muted-foreground font-normal">—</span>
-                          )}
-                        </TableCell>
-                        <TableCell className="py-2">
-                          <Badge className={`${getEventTypeBadgeColor(performance.eventType)} glass-badge text-xs`}>
-                            {performance.eventType}
-                          </Badge>
-                        </TableCell>
-                        <TableCell className="font-black text-white text-sm py-2">
-                          {performance.totalScore.toLocaleString()}
-                        </TableCell>
-                        <TableCell className="py-2">
-                          <div className="flex space-x-1">
-                            <Button 
-                              size="sm" 
-                              onClick={() => loadPerformance(performance)}
-                              className="glass-button bg-blue-500/20 text-blue-200 hover:bg-blue-500/30 border-blue-400/30 p-1.5 transition-all duration-200"
-                            >
-                              <Eye className="h-3 w-3" />
-                            </Button>
-                            <Button 
-                              size="sm"
-                              onClick={() => deletePerformance(performance.id)}
-                              disabled={deletePerformanceMutation.isPending}
-                              className="glass-button bg-red-500/20 text-red-200 hover:bg-red-500/30 border-red-400/30 p-1.5 transition-all duration-200"
-                            >
-                              <Trash2 className="h-3 w-3" />
-                            </Button>
-                          </div>
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </div>
-            )}
-          </CardContent>
-        </Card>
+          </div>
+        </div>
       </div>
     </div>
   );

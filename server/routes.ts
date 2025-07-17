@@ -1,7 +1,8 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
-import { insertPerformanceSchema } from "@shared/schema";
+import { insertPerformanceSchema, insertAchievementSchema } from "@shared/schema";
+import { achievementService } from "./services/achievementService";
 import { z } from "zod";
 
 export async function registerRoutes(app: Express): Promise<Server> {
@@ -79,6 +80,54 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.json({ message: "Performance deleted successfully" });
     } catch (error) {
       res.status(500).json({ message: "Failed to delete performance" });
+    }
+  });
+
+  // Get all achievements
+  app.get("/api/achievements", async (req, res) => {
+    try {
+      const userId = req.query.userId ? parseInt(req.query.userId as string) : undefined;
+      const achievements = await storage.getAchievements(userId);
+      res.json(achievements);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to fetch achievements" });
+    }
+  });
+
+  // Create new achievement
+  app.post("/api/achievements", async (req, res) => {
+    try {
+      const validatedData = insertAchievementSchema.parse(req.body);
+      const achievement = await storage.createAchievement(validatedData);
+      res.status(201).json(achievement);
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ message: "Invalid achievement data", errors: error.errors });
+      }
+      res.status(500).json({ message: "Failed to create achievement" });
+    }
+  });
+
+  // Check if user has specific achievement
+  app.get("/api/achievements/check/:userId/:achievementType", async (req, res) => {
+    try {
+      const userId = parseInt(req.params.userId);
+      const achievementType = req.params.achievementType;
+      const hasAchievement = await storage.hasAchievement(userId, achievementType);
+      res.json({ hasAchievement });
+    } catch (error) {
+      res.status(500).json({ message: "Failed to check achievement" });
+    }
+  });
+
+  // Check for new achievements after performance save
+  app.post("/api/achievements/check", async (req, res) => {
+    try {
+      const { userId, performance } = req.body;
+      const newAchievements = await achievementService.checkAndUnlockAchievements(userId, performance);
+      res.json(newAchievements);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to check achievements" });
     }
   });
 
