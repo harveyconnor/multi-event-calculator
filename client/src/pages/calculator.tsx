@@ -102,7 +102,13 @@ export default function Calculator() {
     if (eventName === "Long Jump" || eventName === "High Jump") {
       return "meters";
     }
-    if (eventName.includes("m") || eventName.includes("Hurdles")) {
+    // Special case for 1500m to show minutes:seconds format
+    if (eventName === "1500m") {
+      return "minutes:seconds";
+    }
+    // Check for running events more specifically
+    if (eventName.includes("100m") || eventName.includes("200m") || eventName.includes("400m") || 
+        eventName.includes("800m") || eventName.includes("Hurdles") || eventName.includes("60m")) {
       return "seconds";
     }
     return isMetric ? "meters" : "feet";
