@@ -148,7 +148,7 @@ export default function Calculator() {
     } else {
       const points = parseInt(value) || 0;
       newResults[index].points = points;
-      // Auto-calculate result when points are entered
+      // Only auto-calculate result when points are entered, don't recalculate points
       if (points > 0 && selectedEventType) {
         const event = eventResults[index];
         const estimatedResult = estimateResult(selectedEventType, event.name, points, event.type);
