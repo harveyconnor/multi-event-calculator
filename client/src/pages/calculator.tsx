@@ -439,11 +439,11 @@ export default function Calculator() {
               </div>
             ) : performances.length === 0 ? (
               <div className="text-center py-12">
-                <div className="bg-muted border-4 border-border w-16 h-16 flex items-center justify-center mx-auto mb-4 transform rotate-12">
-                  <Trophy className="h-8 w-8 text-muted-foreground" />
+                <div className="glass-icon-container w-20 h-20 flex items-center justify-center mx-auto mb-6 transform rotate-12 bg-gradient-to-br from-purple-500/20 to-blue-500/20 border-purple-400/30">
+                  <Trophy className="h-10 w-10 text-white" />
                 </div>
-                <p className="text-muted-foreground font-bold uppercase tracking-wide">NO PERFORMANCES RECORDED YET</p>
-                <p className="text-sm text-muted-foreground mt-1 font-semibold">START BY SELECTING AN EVENT TYPE AND ENTERING RESULTS</p>
+                <p className="text-muted-foreground font-semibold uppercase tracking-wide">NO PERFORMANCES RECORDED YET</p>
+                <p className="text-sm text-muted-foreground mt-1 font-medium">START BY SELECTING AN EVENT TYPE AND ENTERING RESULTS</p>
               </div>
             ) : (
               <div className="overflow-x-auto">
