@@ -495,7 +495,7 @@ export default function Calculator() {
           <CardContent className="p-4">
             {isLoading ? (
               <div className="text-center py-12">
-                <div className="w-12 h-12 border-4 border-border border-t-primary mx-auto mb-4 animate-spin"></div>
+                <div className="w-12 h-12 border-4 border-white/20 border-t-blue-400 mx-auto mb-4 animate-spin rounded-full glass-card"></div>
                 <p className="text-muted-foreground font-bold tracking-wide">Loading Performances...</p>
               </div>
             ) : performances.length === 0 ? (
