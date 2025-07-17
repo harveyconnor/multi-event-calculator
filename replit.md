@@ -21,13 +21,12 @@ Typography: Inter font family with medium weight for enhanced readability and mo
 - **UI Framework**: Shadcn/ui components built on Radix UI primitives
 - **Styling**: Tailwind CSS with custom CSS variables for theming
 
-### Backend Architecture
-- **Runtime**: Node.js with Express.js REST API
-- **Language**: TypeScript with ES modules
-- **Database**: PostgreSQL with Drizzle ORM
-- **Database Provider**: Neon serverless PostgreSQL
-- **Schema Management**: Drizzle Kit for migrations and schema management
-- **Storage**: In-memory storage implementation with interface for database integration
+### Storage Architecture
+- **Primary Storage**: Local storage and IndexedDB for offline-first functionality
+- **Data Persistence**: Browser-based storage with JSON serialization
+- **Offline Support**: Full offline capability with service worker caching
+- **PWA Features**: Progressive Web App with install prompt and background sync
+- **Legacy Support**: Express.js server maintained for development compatibility
 
 ### Project Structure
 ```
@@ -57,12 +56,13 @@ Typography: Inter font family with medium weight for enhanced readability and mo
 - **Event Types**: Support for Pentathlon, Heptathlon, and Decathlon
 - **Point Calculation**: Separate formulas for track (time-based) and field (measurement-based) events
 
-### API Endpoints
-- `GET /api/performances` - Retrieve all performances with optional event type filtering
-- `GET /api/performances/:id` - Get single performance by ID
-- `POST /api/performances` - Create new performance with UUID and validation
-- `PUT /api/performances/:uuid` - Update existing performance by UUID
-- `DELETE /api/performances/:id` - Delete performance by ID
+### Local Storage Functions
+- `getPerformances()` - Retrieve all performances from localStorage
+- `savePerformance()` - Create new performance with UUID generation
+- `updatePerformance()` - Update existing performance by UUID
+- `deletePerformance()` - Delete performance by ID
+- `getAchievements()` - Retrieve all achievements from localStorage
+- `checkAchievements()` - Evaluate and create new achievements based on performance data
 
 ### Frontend Features
 - **Calculator Interface**: Form-based input for each event type
@@ -131,3 +131,5 @@ The application follows a modern full-stack architecture with strong typing thro
 - **Chart Features**: Each performance displays as a radar chart with event names as axes and points determining distance from center
 - **Glassmorphism Integration**: All new components follow the dark mode glassmorphism design theme
 - **Performance Enhancement**: Fixed React hooks issues and optimized component rendering
+- **Offline-First Architecture**: Converted from API server to fully offline local storage using IndexedDB and localStorage
+- **PWA Features**: Added Progressive Web App capabilities with service worker, offline status, and install functionality

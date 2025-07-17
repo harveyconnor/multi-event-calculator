@@ -1,37 +1,34 @@
 import { useState, useEffect } from "react";
-import { useQuery } from "@tanstack/react-query";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-// import { Progress } from "@/components/ui/progress";
 import { Trophy, Star, Target, Clock, TrendingUp, Award, Medal, Crown } from "lucide-react";
-import { type Achievement } from "@shared/schema";
+import { getAchievements, type StoredAchievement } from "@/lib/localStorage";
 
 interface AchievementTimelineProps {
   userId?: number;
-  newAchievements?: Achievement[];
+  newAchievements?: StoredAchievement[];
   onClose?: () => void;
 }
 
 export default function AchievementTimeline({ userId = 1, newAchievements = [], onClose }: AchievementTimelineProps) {
   const [showTimeline, setShowTimeline] = useState(false);
+  const [achievements, setAchievements] = useState<StoredAchievement[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
   
-  const { data: achievements = [], isLoading } = useQuery({
-    queryKey: ["/api/achievements", userId],
-    queryFn: async () => {
+  // Load achievements from localStorage
+  useEffect(() => {
+    const loadAchievements = () => {
       try {
-        const response = await fetch(`/api/achievements?userId=${userId}`);
-        if (!response.ok) {
-          console.error("Failed to fetch achievements:", response.status);
-          return [];
-        }
-        return await response.json() as Achievement[];
+        const stored = getAchievements();
+        setAchievements(stored);
       } catch (error) {
-        console.error("Achievement fetch error:", error);
-        return [];
+        console.error("Error loading achievements:", error);
       }
-    }
-  });
+    };
+    
+    loadAchievements();
+  }, [userId]);
 
   useEffect(() => {
     if (newAchievements.length > 0) {
