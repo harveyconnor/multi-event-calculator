@@ -71,6 +71,7 @@ Typography: Inter font family with medium weight for enhanced readability and mo
 - **Performance Labels**: Optional labels for performances (simplified to "Label")
 - **Performance Editing**: Click history items to load and edit existing performances using UUID tracking
 - **Manual Save Control**: Save performances manually with "SAVE PERFORMANCE" button (no auto-save)
+- **Dynamic Placeholders**: Input field placeholders adapt to metric/imperial toggle showing relevant examples
 - **Responsive Design**: Mobile-optimized interface with adaptive components
 - **Glassmorphism Design**: Translucent UI elements with blur effects, subtle gradients, and layered transparency
 - **Dark Mode Support**: System theme detection with manual toggle between light/dark/system modes

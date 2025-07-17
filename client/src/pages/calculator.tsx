@@ -127,6 +127,42 @@ export default function Calculator() {
     return value;
   };
 
+  const getPlaceholder = (eventName: string) => {
+    const metricPlaceholders: { [key: string]: string } = {
+      "100m": "10.45",
+      "Long Jump": "7.50",
+      "Shot Put": "16.20",
+      "High Jump": "2.10",
+      "400m": "48.25",
+      "110m Hurdles": "13.80",
+      "Discus": "48.50",
+      "Pole Vault": "5.20",
+      "Javelin": "65.40",
+      "1500m": "4:25.50",
+      "100m Hurdles": "13.24",
+      "200m": "23.45",
+      "800m": "2:10.50"
+    };
+
+    const imperialPlaceholders: { [key: string]: string } = {
+      "100m": "10.45",
+      "Long Jump": "24.6",
+      "Shot Put": "53.2",
+      "High Jump": "6.9",
+      "400m": "48.25",
+      "110m Hurdles": "13.80",
+      "Discus": "159.1",
+      "Pole Vault": "17.1",
+      "Javelin": "214.6",
+      "1500m": "4:25.50",
+      "100m Hurdles": "13.24",
+      "200m": "23.45",
+      "800m": "2:10.50"
+    };
+
+    return isMetric ? metricPlaceholders[eventName] : imperialPlaceholders[eventName];
+  };
+
   const { data: performances = [], isLoading } = useQuery({
     queryKey: ["/api/performances", historyFilter],
     queryFn: async () => {
@@ -474,7 +510,7 @@ export default function Calculator() {
                         <Input
                           id={`result-${index}`}
                           type="text"
-                          placeholder={eventConfigs[selectedEventType].events[index].placeholder}
+                          placeholder={getPlaceholder(event.name)}
                           value={event.result}
                           onChange={(e) => updateResult(index, "result", e.target.value)}
                           className="w-full glass-input text-foreground text-sm"
