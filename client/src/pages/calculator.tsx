@@ -252,8 +252,8 @@ export default function Calculator() {
                 <CalculatorIcon className="h-8 w-8 text-accent-foreground" />
               </div>
               <div>
-                <h1 className="text-4xl font-black tracking-tight uppercase">ATHLETICS CALCULATOR</h1>
-                <p className="text-primary-foreground/90 text-sm mt-1 font-bold uppercase tracking-wide">MULTI-EVENT PERFORMANCE TRACKER</p>
+                <h1 className="text-4xl font-black tracking-tight uppercase text-white">ATHLETICS CALCULATOR</h1>
+                <p className="text-white/90 text-sm mt-1 font-bold uppercase tracking-wide">MULTI-EVENT PERFORMANCE TRACKER</p>
               </div>
             </div>
             <div className="flex items-center space-x-3">
