@@ -102,8 +102,8 @@ export default function Calculator() {
     if (eventName === "Long Jump" || eventName === "High Jump") {
       return "meters";
     }
-    // Special case for 1500m to show minutes:seconds format
-    if (eventName === "1500m") {
+    // Special case for 800m and 1500m to show minutes:seconds format
+    if (eventName === "800m" || eventName === "1500m") {
       return "minutes:seconds";
     }
     // Check for running events more specifically
