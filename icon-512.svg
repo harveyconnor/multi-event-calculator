@@ -1,0 +1,20 @@
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="512" height="512" rx="64" fill="#8B5CF6"/>
+  <rect x="48" y="48" width="416" height="416" rx="32" fill="rgba(255,255,255,0.1)" stroke="rgba(255,255,255,0.2)" stroke-width="4"/>
+  
+  <!-- Track icon -->
+  <ellipse cx="256" cy="256" rx="128" ry="80" fill="none" stroke="white" stroke-width="8"/>
+  <ellipse cx="256" cy="256" rx="96" ry="60" fill="none" stroke="white" stroke-width="6"/>
+  
+  <!-- Trophy icon -->
+  <path d="M256 160L280 200H232L256 160Z" fill="white"/>
+  <rect x="232" y="200" width="48" height="56" rx="4" fill="white"/>
+  <rect x="216" y="256" width="80" height="24" rx="4" fill="white"/>
+  <rect x="240" y="280" width="32" height="40" rx="4" fill="white"/>
+  
+  <!-- Achievement stars -->
+  <path d="M176 120L184 144H208L190 160L198 184L176 168L154 184L162 160L144 144H168L176 120Z" fill="white" opacity="0.8"/>
+  <path d="M336 120L344 144H368L350 160L358 184L336 168L314 184L322 160L304 144H328L336 120Z" fill="white" opacity="0.8"/>
+  <path d="M176 360L184 384H208L190 400L198 424L176 408L154 424L162 400L144 384H168L176 360Z" fill="white" opacity="0.8"/>
+  <path d="M336 360L344 384H368L350 400L358 424L336 408L314 424L322 400L304 384H328L336 360Z" fill="white" opacity="0.8"/>
+</svg>

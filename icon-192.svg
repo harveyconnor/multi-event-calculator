@@ -1,0 +1,20 @@
+<svg width="192" height="192" viewBox="0 0 192 192" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="192" height="192" rx="32" fill="#8B5CF6"/>
+  <rect x="24" y="24" width="144" height="144" rx="16" fill="rgba(255,255,255,0.1)" stroke="rgba(255,255,255,0.2)" stroke-width="2"/>
+  
+  <!-- Track icon -->
+  <ellipse cx="96" cy="96" rx="48" ry="32" fill="none" stroke="white" stroke-width="3"/>
+  <ellipse cx="96" cy="96" rx="36" ry="24" fill="none" stroke="white" stroke-width="2"/>
+  
+  <!-- Trophy icon -->
+  <path d="M96 64L104 80H88L96 64Z" fill="white"/>
+  <rect x="88" y="80" width="16" height="20" rx="2" fill="white"/>
+  <rect x="84" y="100" width="24" height="8" rx="2" fill="white"/>
+  <rect x="92" y="108" width="8" height="12" rx="2" fill="white"/>
+  
+  <!-- Achievement stars -->
+  <path d="M72 48L74 54H80L75 58L77 64L72 60L67 64L69 58L64 54H70L72 48Z" fill="white" opacity="0.8"/>
+  <path d="M120 48L122 54H128L123 58L125 64L120 60L115 64L117 58L112 54H118L120 48Z" fill="white" opacity="0.8"/>
+  <path d="M72 128L74 134H80L75 138L77 144L72 140L67 144L69 138L64 134H70L72 128Z" fill="white" opacity="0.8"/>
+  <path d="M120 128L122 134H128L123 138L125 144L120 140L115 144L117 138L112 134H118L120 128Z" fill="white" opacity="0.8"/>
+</svg>
