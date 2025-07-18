@@ -18,19 +18,9 @@ function Router() {
   );
 }
 
-// Simple test component to check if React is working
-function TestComponent() {
-  return (
-    <div style={{ padding: '20px', background: 'white', color: 'black' }}>
-      <h1>Test Component Working!</h1>
-      <p>React is rendering correctly.</p>
-    </div>
-  );
-}
-
 function App() {
   useEffect(() => {
-    console.log('App component mounted');
+    console.log("App component mounted");
     // Setup PWA features
     setupOnlineOfflineHandlers();
   }, []);
@@ -40,10 +30,6 @@ function App() {
       <QueryClientProvider client={queryClient}>
         <TooltipProvider>
           <Toaster />
-          
-
-
-          <TestComponent />
           <Router />
         </TooltipProvider>
       </QueryClientProvider>

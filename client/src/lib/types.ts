@@ -4,7 +4,7 @@ export type EventResult = {
   name: string;
   result: string;
   points: number;
-  type: 'time' | 'measurement';
+  type: "time" | "measurement";
   unit: string;
   day?: number;
 };
@@ -13,7 +13,7 @@ export type EventConfig = {
   name: string;
   events: Array<{
     name: string;
-    type: 'time' | 'measurement';
+    type: "time" | "measurement";
     unit: string;
     placeholder: string;
     day?: number;
@@ -33,8 +33,12 @@ export type StoredAchievement = {
   id: string;
   title: string;
   description: string;
-  date: string;
-  type: 'first_performance' | 'score_improvement' | 'multi_event_completion';
+  type:
+    | "first_performance"
+    | "score_improvement"
+    | "multi_event_completion"
+    | string;
   eventType?: string;
-  score?: number;
+  points: number;
+  unlockedAt: string;
 };
