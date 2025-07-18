@@ -135,3 +135,11 @@ The application follows a modern full-stack architecture with strong typing thro
 - **PWA Features**: Added Progressive Web App capabilities with service worker, offline status, and install functionality
 - **Day-Based Event Organization**: Implemented day divisions for decathlon and heptathlon with running subtotals
 - **Enhanced UI/UX**: Calculator hidden by default, comprehensive summary section with Day 1/Day 2/Final totals, improved form reset behavior
+- **Copyright Footer**: Added dynamic copyright footer with current year display
+
+### July 18, 2025 - Server-Side Cleanup
+- **Full Client-Side Conversion**: Removed all server-side components, Drizzle ORM, and database dependencies
+- **Code Cleanup**: Eliminated unused server directories, shared schemas, and database configuration files
+- **Simplified Architecture**: Now runs as pure client-side React app with Vite serving static files
+- **Dependency Cleanup**: Removed Express, PostgreSQL, authentication, and other server-side packages
+- **Type System**: Consolidated all types into client-side types file, removing shared schema dependency

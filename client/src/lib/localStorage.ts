@@ -1,17 +1,12 @@
 // Local storage utilities for offline-first PWA
-import { type Performance, type Achievement } from "@shared/schema";
+import { type StoredPerformance, type StoredAchievement } from "./types";
 
 // Performance storage
 export const PERFORMANCE_STORAGE_KEY = 'multi-smackdown-performances';
 export const ACHIEVEMENT_STORAGE_KEY = 'multi-smackdown-achievements';
 
-export interface StoredPerformance extends Omit<Performance, 'id'> {
-  id: string; // Use string UUID instead of number
-}
-
-export interface StoredAchievement extends Omit<Achievement, 'id'> {
-  id: string; // Use string UUID instead of number
-}
+// Re-export types for convenience
+export type { StoredPerformance, StoredAchievement };
 
 // Generate UUID for local storage
 export function generateId(): string {

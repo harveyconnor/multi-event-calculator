@@ -1,19 +1,19 @@
 import { useState, useEffect, useRef } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Badge } from "@/components/ui/badge";
-import { Separator } from "@/components/ui/separator";
+import { Card, CardContent, CardHeader, CardTitle } from "../components/ui/card";
+import { Button } from "../components/ui/button";
+import { Input } from "../components/ui/input";
+import { Label } from "../components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../components/ui/select";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../components/ui/table";
+import { Badge } from "../components/ui/badge";
+import { Separator } from "../components/ui/separator";
 
 import { Trash2, Eye, Calculator as CalculatorIcon, Save, Eraser, Trophy, Medal, Crown, Clock, Ruler, Target, Zap, Star, History, ToggleLeft, ToggleRight, Award, BarChart3, Download } from "lucide-react";
 import { Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, ResponsiveContainer, Legend, Tooltip } from 'recharts';
-import { useToast } from "@/hooks/use-toast";
-import { type EventResult } from "@shared/schema";
-import { calculatePoints, estimateResult } from "@/lib/scoring";
-import AchievementTimeline from "@/components/AchievementTimeline";
+import { useToast } from "../hooks/use-toast";
+import { type EventResult, type EventType, type EventConfig } from "../lib/types";
+import { calculatePoints, estimateResult } from "../lib/scoring";
+import AchievementTimeline from "../components/AchievementTimeline";
 import { 
   getPerformances, 
   savePerformance, 
@@ -24,10 +24,10 @@ import {
   type StoredPerformance,
   type StoredAchievement,
   generateId
-} from "@/lib/localStorage";
-import { handleInstallClick } from "@/lib/pwa";
+} from "../lib/localStorage";
+import { handleInstallClick } from "../lib/pwa";
 
-type EventType = "decathlon" | "heptathlon" | "pentathlon";
+// EventType is now imported from types
 
 // InstallButton component to handle PWA installation
 function InstallButton() {
@@ -110,6 +110,7 @@ const eventConfigs = {
 };
 
 export default function Calculator() {
+  console.log('Calculator component rendering...');
   const { toast } = useToast();
   const [selectedEventType, setSelectedEventType] = useState<EventType | null>(null);
   const [eventResults, setEventResults] = useState<EventResult[]>([]);
