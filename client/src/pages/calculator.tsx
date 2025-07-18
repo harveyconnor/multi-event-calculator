@@ -986,6 +986,20 @@ export default function Calculator() {
           </div>
         </div>
       </div>
+      
+      {/* Copyright Footer */}
+      <footer className="mt-12 py-6 border-t border-white/10">
+        <div className="container mx-auto px-4">
+          <div className="text-center">
+            <p className="text-xs text-white/60 font-medium">
+              © {new Date().getFullYear()} Multi Smackdown. All rights reserved.
+            </p>
+            <p className="text-xs text-white/40 mt-1">
+              Track & Field Multi-Event Calculator
+            </p>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 }
